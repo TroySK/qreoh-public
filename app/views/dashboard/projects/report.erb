@@ -1,0 +1,28 @@
+<table class="table table-condensed table-bordered">
+  <thead>
+    <tr>
+      <td>ID</td>
+      <td>Title</td>
+      <td>Description</td>
+      <td>Link</td>
+      <td>Condition</td>
+      <td>Price</td>
+      <td>Availability</td>
+      <td style="width:200px">Image Link</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @projects.each do |project| %>
+      <tr>
+        <td><%= project.slug %></td>
+        <td><%= project.title %></td>
+        <td><%= project.desc %></td>
+        <td><%= designer_project_url(project.designer, project) %></td>
+        <td>new</td>
+        <td><%= project.price.round %></td>
+        <td><%= project.ooak ? 'in stock' : 'preorder' %></td>
+        <td><%= project.selfie? ? cloudinary_url(project.selfie.path, :width => 480, :height => 480) : 'http:' + project.project_photos.first.image.thumb.url %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,6 @@
+<h3>Hii <%= @resource.email.gsub(/@.*/, '').capitalize %>!</h3>
+<p>You or someone posing as you tried to make way too many attempts to login to <a href="http://www.qreoh.com" target="_blank" title="QREOH">QREOH</a> unsuccessfully. We locked your account just incase someone was trying to act smart. Please click the link below to re-enable your account. Sorry you have to go through these hoofs, its only to protect you.</p>
+<p><%= link_to('Unlock my account', unlock_url(@resource, unlock_token: @token), {:style => 'background:#000;color: #fff;text-decoration:none;padding:10px;'}) %></p>
+<p>We hope you understand, we care for your safety. :) Have a wonderful day ahead!</p>
+<p>Best,</p>
+<p>QREOH Happiness Gang.</p>

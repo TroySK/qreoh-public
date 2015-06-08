@@ -1,0 +1,33 @@
+<div class="container container-top">
+  <h1 class="text-lg">Contact Us</h1>
+  <div class="row">
+      <div class="col-md-6 col-sm-12">
+      <h1>Our registered office:</h1>
+      <address>
+        <strong>QREOH</strong><br>
+        1st Floor, 205, Sant Nagar<br>
+        East of Kailash, New Delhi<br>
+        Delhi, India - 110065<br>
+        <abbr title="Phone">P:</abbr> +91 7503455305
+      </address>
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <h1>Our online presence:</h1>
+      http://www.qreoh.com<br>
+      hello@qreoh.com<br>
+      http://www.twitter.com/qreoh<br>
+      http://www.facebook.com/qreoh<br>
+      http://www.pinterest.com/qreoh<br>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div data-uv-inline="classic_widget" data-uv-mode="full" data-uv-primary-color="#000000" data-uv-link-color="#000000" data-uv-default-mode="support" data-uv-forum-id="218251" data-uv-width="90%" data-uv-height="350px"></div>
+    </div>
+  </div>
+</div>
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Viewed Contact US Page");
+}
+<% end %>

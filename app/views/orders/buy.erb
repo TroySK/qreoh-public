@@ -1,0 +1,67 @@
+<div class="container container-top">
+  <h1 class="text-lg">Your Shopping Cart</h1>
+  <p>Please verify your orders. Make sure you have selected the right size.</p>
+  <div class="row">
+    <div class="col-md-9 col-sm-12 col-xs-12">
+      <h2 class="text-md">Your Order</h2>
+      <div class="row hidden-sm hidden-xs">
+        <div class="col-md-2 text-uppercase"><strong>Project</strong></div>
+        <div class="col-md-6 text-uppercase"><strong>Details</strong></div>
+        <div class="col-md-2 text-uppercase"><strong>Size</strong></div>
+        <div class="col-md-2 text-uppercase"><strong>Price</strong></div>
+      </div>
+      <% @shopping_cart.shopping_cart_items.each do |item| %>
+      <div class="row row-line-item" >
+        <div class="col-md-2 col-sm-4 col-xs-4">
+          <% if item.project.selfie? %>
+          <%= cl_image_tag(item.project.selfie.path, size: '440x440', :crop => :pad, :class => 'img-responsive') %>
+          <% else %>
+          <%= image_tag item.project.project_photos.first.image.thumb.url, :class => 'img-responsive' %>
+          <% end %>
+        </div>
+        <div class="col-md-6 col-sm-4 col-xs-4">
+          <h1><%= item.project.title %></h1>
+          <h2><%= item.project.designer.name %></h2>
+          <form accept-charset="UTF-8" action="/remove" enctype="multipart/form-data" method="post">
+            <div style="margin:0;padding:0;display:inline">
+              <input name="utf8" type="hidden" value="✓">
+              <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+              <input name="project_id" type="hidden" value="<%= item.project.id %>">
+            </div>
+            <input type="submit" value="Remove">
+          </form>
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-2">
+          <p class="text-uppercase"><%= item.details[:size] %></p>
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-2">
+          <p><%= local_price_with_symbol(item.price) %></p>
+        </div>
+      </div>
+      <% end %>
+      <div class="row">
+        <div class="col-md-8 text-right col-sm-9 col-xs-9">
+          <h2 class="text-md"><strong>Total</strong></h2>
+        </div>
+        <div class="col-md-3 text-right col-sm-3 col-xs-3"><h2 class="text-md"><strong><%= local_price_with_symbol(@shopping_cart.total) %></strong></h2></div>
+      </div>
+      <div class="row">
+        <div class="col-md-offset-4 col-md-4 col-sm-6 col-xs-6">
+          <a href="/" class="btn btn-default btn-block">Continue Shopping</a>
+        </div>
+        <div class="col-md-4 col-sm-6 col-xs-6">
+          <a href="<%= checkout_url %>" class="btn btn-primary btn-block">Checkout</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-12 col-xs-12">
+      <h2 class="text-md">The QREOH Service</h2>
+      <p>QREOH is a platform to discover independent designers. When you buy from a designer on QREOH, we make sure that the product gets delivered to you with upmost love and care. We are your digital friends who helps you shop.</p>
+    </div>
+  </div>
+</div>
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Added to Cart");
+}
+<% end %>

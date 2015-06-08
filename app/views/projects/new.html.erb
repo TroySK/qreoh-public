@@ -1,0 +1,41 @@
+<% content_for :title do %>
+  <title>New Project by <%= @project.designer.name %> | QREOH</title>
+<% end %>
+<div class="container container-top">
+  <div class="jumbotron">
+    <h1>We are not accepting new projects for now.</h1>
+    <!-- <h1>Let's get started &hellip;</h1>
+    <h2>Enter the title of the product</h2>
+    <%= simple_form_for ([@project.designer, @project]), :html => { :multipart => true } do |f| %>
+      <%= f.input :designer_id, :as => :hidden, :input_html => {:value => @project.designer.id} %>
+      <h2><%= f.input :title, :label => false %></h2>
+      <p><%= f.button :submit, :value => "Next", :class => 'btn btn-primary btn-lg' %></p>
+    <% end %> -->
+</div>
+</div>
+<div class="container-fluid">
+  <div class="row margin-bottom-lg">
+    <div class="col-md-10 col-md-offset-1">
+      <h5 class="text-uppercase"><strong>By The Same Designer</strong></h5>
+      <div id="designer-projects-carousel" class="carousel slide" data-interval="false">
+        <div class="carousel-inner">
+          <% @current_projects = @project.related_projects %>
+          <% @current_projects.each_slice(4) do |projects| %>
+          <div class="item <%= 'active' if @current_projects[0] == projects[0] %>">
+            <div class="row">
+              <% projects.each do |project| %>
+              <%= render "project", project: project %>
+              <% end %>
+            </div>
+          </div>
+          <% end %>
+        </div>
+        <a class="left carousel-control" href="#designer-projects-carousel" data-slide="prev"><i class="fa fa-angle-left fa-5x"></i></a>
+        <a class="right carousel-control" href="#designer-projects-carousel" data-slide="next"><i class="fa fa-angle-right fa-5x"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<% content_for :javascript do %>
+$('input[type="text"]').focus();
+<% end %>

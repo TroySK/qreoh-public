@@ -1,0 +1,31 @@
+<div class="container container-top">
+  <div class="row">
+    <div class="col-lg-12 col-md-12 container-designer">
+      <% @designers.each do |designer| %>
+        <%= render "designer", designer: designer %>
+      <% end %>
+    </div>
+  </div>
+  <div class="row text-right">
+    <%= will_paginate @designers, renderer: BootstrapPagination::Rails %>
+  </div>
+</div>
+<% content_for :javascript_include do %>
+<script src="//cdn.jsdelivr.net/jquery.infinitescroll/2.0b2/jquery.infinitescroll.min.js"></script>
+<% end %>
+<% content_for :javascript do %>
+$('.container-designer').infinitescroll({
+  loading     : {
+    msgText      : '<em>Loading more designers &hellip;</em>',
+    finishedMsg  : "This is the end, beautiful friend. This is the end, my only friend, the end &hellip;"
+  },
+  navSelector  : "ul.pagination",
+  nextSelector : "li.next a",
+  itemSelector : ".designer-thumbnail.text-center"
+});
+<% end %>
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Viewed Designers List Page");
+}
+<% end %>

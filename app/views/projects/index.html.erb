@@ -1,0 +1,21 @@
+<div class="row-fluid">
+  <div class="span10 offset1">
+    <div class="menu row-fluid main-block">
+      <div class="pull-left">
+        <ul>
+          <li class="last"><a class="active">LATEST</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="row-fluid main-block thumbnail-row">
+      <%- @projects.each_with_index do |project, index| %>
+      <% @project = project %>
+      <%= render "project_thumbnail", locals: {designer: @project.designer, project: project} %>
+      <%- if index and index.to_i !=0 and ((index+1)%4) == 0 %>
+    </div>
+    <div class="row-fluid main-block thumbnail-row">
+      <% end -%>
+      <% end if @projects -%>
+    </div>
+  </div>
+</div>

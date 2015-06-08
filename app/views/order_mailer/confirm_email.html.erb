@@ -1,0 +1,79 @@
+<h1 style="font-family:'Palatino',san-serif">Thanks!</h1>
+<h4 style="text-transform:uppercase;">By shopping on QREOH, you're supporting independent designers;</h4>
+<br>
+<p>Your order has been successfully placed. The order number is <strong><%= @order.id %></strong> and the confirmation code is <strong><%= @order.confirm_code %></strong>.</p>
+<p>It's worth noting that we're really quick at picking, packing and processing your order - it gets done really quickly after you click on the 'Buy' button. We're really proud of this, but it means we're not able to make any amendments to your order including changing the delivery address, items colours and sizes or removing items from your order.</p>
+<p>We're sure you know what you ordered, but should you forget you'll find your order summary as well as everything you might need to know right below.</p>
+<p>We will send you an update as soon as your order is shipped, which should happen by <%= @order.shipping_date.strftime('%A, %B %e, %Y') %>.</p>
+<br>
+<p>And remember, if you have any question we're just an email away. Hit reply or click <strong><a href="http://www.qreoh.com/contact-us">HERE</a></strong>!</p>
+<hr style="border-color:#000;">
+<table width="100%" style="width:100%;vertical-align:top;">
+  <tr>
+    <td style="width:75%;">
+      <h3 style="text-transform:uppercase;">Your Order</h3>
+      <table width="100%" style="width:100%;border-right:2px solid #eaeaea;vertical-align:top;">
+        <tr>
+          <td width="15%">Project</td>
+          <td width="50%">Description</td>
+          <td width="15%">Size</td>
+          <td width="20%">Price</td>
+        </tr>
+        <% @order.shopping_cart.shopping_cart_items.each do |item| %>
+        <tr>
+          <td width="15%">
+            <% if item.project.selfie? %>
+            <%= cl_image_tag(item.project.selfie.path, size: '240x240', :alt => item.project.title, :crop => :fill, :style => 'width:75px;height:75px;border:2px solid #eaeaea;') %>
+            <% else %>
+            <%= image_tag(item.project.project_photos.first.image.thumb.url, :alt => item.project.title, :style => 'width:75px;height:75px;border:2px solid #eaeaea;') if item.project.project_photos.first %>
+            <% end %>
+          </td>
+          <td width="50%">
+            <h4 style="text-transform:uppercase;font-weight:700;"><%= item.project.title%></h4>
+            <h5 style="font-family:'Palatino',san-serif;text-transform:uppercase;"><%= item.project.designer.name %></h5>
+          </td>
+          <td width="15%" style="text-transform:uppercase;"><%= item.details[:size] %></td>
+          <td width="20%">Rs. <%= item.price.to_i %></td>
+        </tr>
+        <tr>
+          <td colspan="4" width="100%">
+            <hr style="border-color:#eaeaea;border-style:double;">
+          </td>
+        </tr>
+        <% end %>
+        <tr>
+          <td colspan="2"></td>
+          <td><strong>Subtotal</strong></td>
+          <td>Rs. <%= @order.shopping_cart.total.to_i %></td>
+        </tr>
+        <tr>
+          <td colspan="2"></td>
+          <td><strong>Discount</strong></td>
+          <td>Rs. <%= @order.discount.to_i %></td>
+        </tr>
+        <tr>
+          <td colspan="2"></td>
+          <td style="font-size:18px;"><strong>TOTAL</strong></td>
+          <td style="font-size:18px;">Rs. <%= @order.amount %></td>
+        </tr>
+      </table>
+    </td>
+    <td style="width:25%;">
+      <h3 style="text-transform:uppercase;margin-left:10px;">Shipping Address</h3>
+      <p style="margin-left: 10px;">
+        <%= @order.shipping_address.name %><br>
+        <%= [@order.shipping_address.address1, @order.shipping_address.address2].join(', ') %><br>
+        <%= [@order.shipping_address.city, @order.shipping_address.state].join(', ') %><br>
+        <%= @order.shipping_address.country %><br>
+        Zip Code - <%= @order.shipping_address.zipcode %><br>
+        Phone No. - <%= @order.shipping_address.phone_number %><br>
+      </p>
+    </td>
+  </tr>
+</table>
+<hr style="border-color:#000;">
+<br>
+Thanks!<br>
+QREOH Happiness Gang <br>
+<a href="https://twitter.com/qreoh" target="_blank">@qreoh</a> <br>
++91 7503455305

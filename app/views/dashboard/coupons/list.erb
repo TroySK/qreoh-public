@@ -1,0 +1,35 @@
+<table class="table">
+  <thead>
+    <tr>
+      <td>Code</td>
+      <td>Type</td>
+      <td>Value</td>
+      <td>Order ID</td>
+      <td>Used</td>
+      <td>Last Updated</td>
+      <td>Delete</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @coupons.each do |coupon| %>
+      <tr>
+        <td><%= coupon.code %><br></td>
+        <td><%= coupon.label %></td>
+        <td><%= coupon.value %></td>
+        <td><%= coupon.order_id %></td>
+        <td><%= coupon.used %></td>
+        <td><%= coupon.updated_at.strftime('%d-%m-%y') %></td>
+        <td><%= link_to("Delete", dashboard_coupon_url(coupon), method: :delete) unless coupon.used %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @coupons %>
+
+<h2>Create a new coupon</h2>
+<%= simple_form_for Coupon.new, :url => dashboard_coupons_url, :html => {:class => 'form-horizontal'} do |f| %>
+  <%= f.input :code, label: 'Coupon Code', :input_html => { :value => SecureRandom.uuid } %>
+  <%= f.input :coupon_type, collection: [['Percentage', '0'], ['Fixed', '1'], ['Percentage Multiply', '2'], ['Fixed Multiply', '3']] %>
+  <%= f.input :value %>
+  <%= f.button :submit %>
+<% end %>

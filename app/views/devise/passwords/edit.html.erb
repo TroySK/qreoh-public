@@ -1,0 +1,24 @@
+<div class="container container-top">
+  <h1 class="text-lg">Change Your Password?</h1>
+  <p>The best passwords are the ones which keep changing. Thanks for being awesome!</p>
+  <div class="row">
+    <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8">
+      <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :put }) do |f| %>
+      <div class="panel panel-primary">
+        <div class="panel-heading">Recover Password</div>
+        <div class="panel-body">
+          <%= f.error_notification %>
+          <%= f.input :reset_password_token, as: :hidden %>
+          <%= f.full_error :reset_password_token %>
+          <%= f.input :password, label: "New password", autofocus: true %>
+          <%= f.input :password_confirmation, label: "Re-enter it to confirm" %>
+        </div>
+        <div class="panel-footer">
+          <%= f.button :submit, "Change my password", :class => "btn btn-primary", :title => 'Make me Awesome!' %>
+        </div>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<%= render "devise/shared/links" %>

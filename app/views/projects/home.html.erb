@@ -1,0 +1,232 @@
+<div class="container container-carousel">
+  <div id="carousel-homepage" class="carousel fade" data-ride="carousel">
+    <ol class="carousel-indicators">
+      <% @showcase_designers.first(5).each_with_index do |designer, index| %>
+      <li data-target="#carousel-homepage" data-slide-to="<%= index %>" class="<%= 'active' if index.zero? %>"></li>
+      <% end %>
+    </ol>
+    <div class="carousel-inner" role="listbox">
+      <% @showcase_designers.first(5).each_with_index do |designer, index| %>
+      <div class="item<%= ' active' if index.zero? %>" style='<%= "background: url(#{cloudinary_url(designer.cover_photo.path, :width => 1200, :crop => :fit) }) no-repeat; background-size: cover; background-position: center 0;" if designer.cover_photo %>'>
+        <div class="carousel-caption">
+          <% unless designer.current_collection.blank? %>
+          <h1><a href="<%= designer_url(designer) %>" class="text-block"><%= designer.current_collection %></a></h1>
+          <% end %>
+          <h2><a href="<%= designer_url(designer) %>" class="text-block"><%= designer.name %></a></h2>
+          <p><a href="<%= designer_url(designer) %>" class="btn btn-primary">See the collection</a></p>
+          <br>
+        </div>
+      </div>
+      <% end %>
+    </div>
+    <a class="left carousel-control" href="#carousel-homepage" role="button" data-slide="prev">
+      <i class="fa fa-angle-left fa-4x"></i>
+    </a>
+    <a class="right carousel-control" href="#carousel-homepage" role="button" data-slide="next">
+      <i class="fa fa-angle-right fa-4x"></i>
+    </a>
+  </div>
+</div>
+<div class="container">
+  <div class="row text-center">
+    <p class="callout-block">A PLATFORM TO DISCOVER INDEPENDENT DESIGNERS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/how-it-works" class="btn btn-primary">How it Works</a></p>
+  </div>
+</div>
+<div class="container">
+  <div class="row usp-block">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="row">
+        <div class="col-md-4 col-sm-4 col-xs-4 text-right">
+          <i class="fa fa-truck fa-3x fa-flip-horizontal"></i>
+        </div>
+        <div class="col-md-8 col-sm-8 col-xs-8 text-left">
+          <h3>Free Shipping</h3>
+          <h3>In India</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="row">
+        <div class="col-md-4 col-sm-4 col-xs-4 text-right">
+          <i class="fa fa-globe fa-3x"></i>
+        </div>
+        <div class="col-md-8 col-sm-8 col-xs-8 text-left">
+          <h3>Worldwide</h3>
+          <h3>Delivery</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="row">
+        <div class="col-md-4 col-sm-4 col-xs-4 text-right">
+          <i class="fa fa-star fa-3x"></i>
+        </div>
+        <div class="col-md-8 col-sm-8 col-xs-8 text-left">
+          <h3>Exclusive</h3>
+          <h3>Labels</h3>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="row">
+        <div class="col-md-4 col-sm-4 col-xs-4 text-right">
+          <i class="fa fa-money fa-3x"></i>
+        </div>
+        <div class="col-md-8 col-sm-8 col-xs-8 text-left">
+          <h3>Cash on</h3>
+          <h3>Delivery</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row margin-bottom-lg">
+    <% @showcase_designers.last(2).each_with_index do |designer, index| %>
+    <div class="col-md-6 col-sm-12">
+      <div class="row">
+        <div class="col-md-12 col-sm-12">
+        <a href="<%= designer_url(designer) %>"><%= cl_image_tag(designer.cover_photo.path, :size => '600x200', :crop => :fill, :class => "img-responsive", :alt => designer.name) %></a>
+        </div>
+        <div class="col-md-12 col-sm-12">
+          <% unless designer.current_collection.blank? %>
+          <h1><a href="<%= designer_url(designer) %>" class="text-block"><%= designer.current_collection %></a></h1>
+          <% end %>
+          <h2><a href="<%= designer_url(designer) %>" class="text-block"><%= designer.name %></a></h2>
+          <p><a href="<%= designer_url(designer) %>" class="btn btn-primary">See the collection</a></p>
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>
+<div class="container sets-block">
+  <div class="row">
+    <div class="col-md-4 col-sm-12 text-center">
+      <a href="/shop/bottoms"><%= image_tag "bottoms.jpg", :class => "img-responsive", :alt => "Bottoms" %></a>
+      <a href="/shop/bottoms" title="Bottoms"><h3>Bottoms</h3></a>
+    </div>
+    <div class="col-md-4 col-sm-12 text-center">
+      <a href="/shop/dresses"><%= image_tag "dresses.jpg", :class => "img-responsive", :alt => "Dresses" %></a>
+      <a href="/shop/dresses" title="Dresses"><h3>Dresses</h3></a>
+    </div>
+    <div class="col-md-4 col-sm-12 text-center">
+      <a href="/shop/tops"><%= image_tag "tops.jpg", :class => "img-responsive", :alt => "Tops" %></a>
+      <a href="/shop/tops" title="Tops"><h3>Tops</h3></a>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row margin-bottom-lg">
+    <div class="col-md-10 col-md-offset-1">
+      <h2 class="margin-bottom-md">Popular Right Now</h2>
+      <div class="carousel-responsive">
+      <% @ooak_projects.each do |project| %>
+        <%= render "project", project: project %>
+      <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row margin-bottom-lg">
+    <div class="col-md-10 col-md-offset-1">
+    <h2>Conversations on QREOH</h2>
+    <div class="row">
+      <% @blog_posts.first(2).each do |post| %>
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <a href="<%= post.url %>" title="<%= post.title %>">
+          <div class="img-blog-item" style="background-image: url(<%= post.image %>);"></div>
+        </a>
+      </div>
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <a href="<%= post.url %>"><h1><%= post.title %></h1></a>
+        <p><%= post.summary.truncate(300) %></p>
+        <a href="<%= post.url%>" class="btn btn-primary btn-sm">Read More</a>
+      </div>
+      <% end if @blog_posts %>
+    </div>
+    <div class="row">
+      <% @blog_posts.last(6).each_slice(3) do |posts| %>
+      <div class="col-md-6 col-sm-6 col-xs-12">
+        <% posts.each do |post| %>
+        <p><a href="<%= post.url %>" title="<%= post.title %>"><strong><%= post.title %> ></strong></a></p>
+        <% end %>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<div class="container sets-block">
+  <div class="row">
+    <div class="col-md-4 col-sm-12 text-center">
+      <a href="/shop/tie-dye"><%= image_tag "tie_dye.jpg", :class => "img-responsive", :alt => "Tie-Dye" %></a>
+      <a href="/shop/tie-dye" title="Tie-Dye"><h3>Tie-Dye</h3></a>
+    </div>
+    <div class="col-md-4 col-sm-12 text-center">
+      <a href="/shop/outerwear"><%= image_tag "outerwear.jpg", :class => "img-responsive", :alt => "Outerwear" %></a>
+      <a href="/shop/outerwear" title="Outerwear"><h3>Outerwear</h3></a>
+    </div>
+    <div class="col-md-4 col-sm-12 text-center">
+      <a href="/shop/new-in"><%= image_tag "new_in.jpg", :class => "img-responsive", :alt => "New In" %></a>
+      <a href="/shop/new-in" title="New In"><h3>New In</h3></a>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row margin-bottom-md">
+    <div class="col-md-10 col-md-offset-1">
+      <h2 class="margin-bottom-md">Designers on QREOH</h2>
+      <div class="carousel-responsive">
+      <% @designers.each do |designer| %>
+        <%= render "designers/designer", designer: designer %>
+      <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row margin-bottom-lg">
+    <div class="col-md-offset-1 col-md-10 tumblr-block">
+      <h2>Latest QREOH Picks</h2>
+      <div class="row">
+        <% @tumblr_posts.each do |post| %>
+        <div class="col-lg-1 col-md-1 col-sm-2 col-xs-3 col-tumblr-pick">
+          <a href="<%= post.url %>" target="_blank" title="<%= post.title %>"><div class="img-tumblr-pick" style="background-image:url('<%= post.image %>')"></div></a>
+        </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/gsap/1.14.1/TweenMax.min.js", "jquery.scrollmagic.min.js" %>
+<% end %>
+<% content_for :javascript do %>
+// Scolling animations
+var controller = new ScrollMagic();
+new ScrollScene({
+  triggerElement: ".carousel-inner",
+  duration: $(window).height()
+})
+.addTo(controller)
+.triggerHook("onLeave")
+.setTween(new TimelineMax().add([
+  TweenMax.fromTo(".alt-header", 1, {background: "rgba(255, 255, 255, -2)", boxShadow: "0 0 3px rgba(0,0,0,-2)"}, {background: "rgba(255, 255, 255, 0.98)", boxShadow: "0 0 3px rgba(0,0,0,0.1)", ease: Linear.ease})
+]));
+
+new ScrollScene({
+  triggerElement: ".carousel-inner",
+  duration: 300
+})
+.addTo(controller)
+.triggerHook("onLeave")
+.setTween(new TimelineMax().add([
+  TweenMax.fromTo("#carousel-homepage .item", 1, {backgroundPositionY: "0"}, {backgroundPositionY: ((window.innerHeight/3) + "px"), ease: Linear.easeNone}),
+  TweenMax.fromTo("#carousel-homepage .carousel-control", 1, {top: "30%"}, {top: "80%", ease: Linear.easeNone})
+]));
+
+<% end %>
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Viewed HomePage");
+}
+<% end %>

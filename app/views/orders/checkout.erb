@@ -1,0 +1,148 @@
+<div class="container container-top">
+  <h1 class="text-lg">Shipping Information</h1>
+  <p>Please verify your orders. Make sure you have selected the right size. Please let us know where you would like the product to be shipped. We are now shipping worldwide.</p>
+  <div class="row">
+    <div class="col-md-8 col-sm-12 col-xs-12">
+      <h2 class="text-md">Your Order</h2>
+      <div class="row hidden-sm hidden-xs">
+        <div class="col-md-2 text-uppercase"><strong>Project</strong></div>
+        <div class="col-md-6 text-uppercase"><strong>Details</strong></div>
+        <div class="col-md-2 text-uppercase"><strong>Size</strong></div>
+        <div class="col-md-2 text-uppercase"><strong>Price</strong></div>
+      </div>
+      <% @shopping_cart.shopping_cart_items.each do |item| %>
+      <div class="row row-line-item" >
+        <div class="col-md-2 col-sm-4 col-xs-4">
+          <% if item.project.selfie? %>
+          <%= cl_image_tag(item.project.selfie.path, size: '100x100', :crop => :fill, :class => 'img-responsive') %>
+          <% else %>
+          <%= image_tag item.project.project_photos.first.image.thumb.url, :class => 'img-responsive' %>
+          <% end %>
+        </div>
+        <div class="col-md-6 col-sm-4 col-xs-4">
+          <h1><%= item.project.title %></h1>
+          <h2><%= item.project.designer.name %></h2>
+          <form accept-charset="UTF-8" action="/remove" enctype="multipart/form-data" method="post">
+            <div style="margin:0;padding:0;display:inline">
+              <input name="utf8" type="hidden" value="✓">
+              <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+              <input name="project_id" type="hidden" value="<%= item.project.id %>">
+            </div>
+            <input type="submit" value="Remove">
+          </form>
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-2">
+          <p class="text-uppercase"><%= item.details[:size] %></p>
+        </div>
+        <div class="col-md-2 col-sm-2 col-xs-2">
+          <p><%= local_price_with_symbol(item.price) %></p>
+        </div>
+      </div>
+      <% end %>
+      <div class="row margin-top-md margin-bottom-md">
+        <form accept-charset="UTF-8" action="/apply_coupon" enctype="multipart/form-data" id="couponForm" method="post" class="coupon-block">
+          <div class="col-md-6 col-sm-12 col-xs-12 text-right text-left-sm text-left-xs">
+            <p><strong>Have a discount code? This is the place to put it!</strong></p>
+            <div style="margin:0;padding:0;display:inline">
+              <input name="utf8" type="hidden" value="✓">
+              <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+            </div>
+          </div>
+          <div class="col-md-4 col-sm-6 col-xs-6">
+            <input type="text" placeholder="Coupon Code" class="form-control" name="coupon_code">
+          </div>
+          <div class="col-md-2 col-sm-6 col-xs-6">
+            <input type="submit" class="btn btn-default btn-sm btn-block" value="Apply">
+          </div>
+        </form>
+      </div>
+      <div class="row">
+        <div class="col-md-offset-6 col-md-6">
+          <table class="table text-uppercase table-total">
+            <tr>
+              <td>Sub-total</td>
+              <td><%= local_price_with_symbol(@shopping_cart.total) %></td>
+            </tr>
+            <tr>
+              <td>Discount</td>
+              <td><span id="orderDiscount"><%= local_price_with_symbol(@shopping_cart.order.discount) %></span></td>
+            </tr>
+            <tr class="bg-info">
+              <td>Total</td>
+              <td><span id="orderAmount"><%= local_price_with_symbol(@shopping_cart.order.amount) %></span></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+       <div class="row">
+        <div class="col-md-offset-3 col-sm-offset-3 col-md-6 col-sm-6 col-xs-12">
+          <a href="/" class="btn btn-default btn-block btn-lg">Continue Shopping</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-12 col-xs-12">
+      <h2 class="text-md">Your Shipping Address</h2>
+      <%= simple_form_for @shipping_address, :url => "/payment", :html => { :data => { "validate" => "parsley" }, :class => 'form-vertical', :multipart => true } do |f| %>
+        <%= f.input :order_id, :as => :hidden, :input_html => { :value => @order.id } %>
+        <%= f.input :name, :input_html => { :data => { "required" => "true" } }, required: false %>
+        <%= f.input :address1, :label => "Address", :input_html => { :data => { "required" => "true" } }, required: false %>
+        <%= f.input :address2, :label => false %>
+        <%= f.input :city, :input_html => { :data => { "required" => "true" } }, required: false %>
+        <%= f.input :state, :input_html => { :data => { "required" => "true" } }, required: false %>
+        <%= f.input :zipcode, :input_html => { :data => { "required" => "true" } }, required: false %>
+        <%= f.input :country, priority: ["#{ Rails.env.development? ? 'IN' : local_country_code }"], :selected => "#{ Rails.env.development? ? 'IN' : local_country_code }", :input_html => {:data => { "required" => "true" }, :class => 'form-control' } %>
+        <%= f.input :phone_number, :input_html => { :data => { "required" => "true" } }, required: false %>
+        <%= f.button :submit, 'Checkout', :class => 'btn btn-primary btn-block btn-lg' %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<% content_for :javascript_include do %>
+<%= javascript_include_tag "parsley" %>
+<% end %>
+<% content_for :javascript do %>
+$('#couponForm').submit(function(e){
+  e.preventDefault();  
+  var valuesToSubmit = $(this).serialize();
+  $.ajax({
+    url: $(this).attr('action'),
+    data: valuesToSubmit,
+    dataType: 'JSON',
+    type: 'POST'
+  }).success(function(response){
+    if(response.success){
+      $.bootstrapGrowl(response.message, {
+        type: "info",
+        align: 'right',
+        offset: {from: 'top', amount: 50},
+        allow_dismiss: true,
+        delay: 10000
+      });
+      $('#orderDiscount').html(response.discount);
+      $('#orderAmount').html(response.amount);
+    } else{
+      $.bootstrapGrowl("Your coupon is invalid.", {
+        type: "error",
+        align: 'right',
+        offset: {from: 'top', amount: 50},
+        allow_dismiss: true,
+        delay: 10000
+      });
+    }
+  }).error(function(){
+    $.bootstrapGrowl("Oops! Something went wrong please try again.", {
+      type: "error",
+      align: 'right',
+      offset: {from: 'top', amount: 50},
+      allow_dismiss: true,
+      delay: 10000
+    });
+  });
+});
+<% end %>
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.identify("<%= current_user.id %>");
+  mixpanel.track("Viewed Order Page");
+}
+<% end %>

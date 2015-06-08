@@ -1,0 +1,132 @@
+<div class="container container-top">
+  <div class="row">
+    <div class="col-xs-12 col-sm-3 col-filters">
+      <div class="row" data-spy="affix" data-aoffset-top="200" data-offset-bottom="500">
+        <form action="<%= shop_url %>" id="categories-form" method="GET" accept-charset="UTF-8" class="hide">
+          <div class="col-md-12 col-sm-12 col-xs-6">
+            <h4 class="text-label">Categories</h4>
+            <ul class="list-unstyled">
+              <% ActsAsTaggableOn::Tag.most_used.first(10).each do |tag| %>
+                <% if ["men", "women", "accessories"].include?(tag.name) %>
+                <li>
+                  <label class="boolean optional control-label checkbox" for="<%= tag.name %>">
+                    <input type="checkbox" value="<%= tag.name %>" name="tags[]" <%= 'checked' if @category_tags && @category_tags.include?(tag.name) %>/><%= tag.name.capitalize %>
+                  </label>
+                </li>
+                <% end %>
+              <% end %>
+            </ul>
+          </div>
+        </form>
+        <form action="<%= shop_url %>" id="filters-form" method="GET" accept-charset="UTF-8">
+          <div class="col-md-12 col-sm-12 col-xs-6">
+            <h4 class="text-label">Collections</h4>
+            <ul class="list-unstyled">
+              <% ActsAsTaggableOn::Tag.most_used.first(10).each do |tag| %>
+                <% next if ["men", "women", "accessories"].include?(tag.name) %>
+                <li>
+                  <label class="boolean optional control-label checkbox" for="<%= tag.name %>">
+                    <input type="checkbox" value="<%= tag.name %>" name="tags[]" <%= 'checked' if @filter_tags && @filter_tags.include?(tag.name) %>/><%= tag.name.capitalize %>
+                  </label>
+                </li>
+              <% end %>
+            </ul>
+            <div class="collapse" id="collapseFilters">
+              <ul class="list-unstyled">
+                <% ActsAsTaggableOn::Tag.most_used.drop(10).each do |tag| %>
+                  <% next if ["men", "women", "accessories"].include?(tag.name) %>
+                  <li>
+                    <label class="boolean optional control-label checkbox" for="<%= tag.name %>">
+                      <input type="checkbox" value="<%= tag.name %>" name="tags[]" <%= 'checked' if @filter_tags && @filter_tags.include?(tag.name) %>/><%= tag.name.capitalize %>
+                    </label>
+                  </li>
+                <% end %>
+              </ul>
+              <a data-toggle="collapse" href="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters"><strong>less</strong></a>
+            </div>
+            <a data-toggle="collapse" href="#collapseFilters" aria-expanded="false" aria-controls="collapseFilters" class="nav-expand collapsed"><strong>more</strong></a>
+          </div>
+        </form>
+        <form action="<%= shop_url %>" id="designers-form" method="GET" accept-charset="UTF-8">
+          <div class="col-md-12 col-sm-12 col-xs-6">
+            <h4 class="text-label">Designer</h4>
+            <ul class="list-unstyled">
+              <% Designer.active.order("slug ASC").first(8).each do |designer| %>
+                <li>
+                  <label class="boolean optional control-label checkbox" for="<%= designer.name %>">
+                    <input type="checkbox" value="<%= designer.slug %>" name="designers[]" <%= 'checked' if params[:designers] && params[:designers].include?(designer.slug) %>/><%= designer.name %>
+                  </label>
+                </li>
+              <% end %>
+            </ul>
+            <div class="collapse" id="collapseDesigners">
+              <ul class="list-unstyled">
+                <% Designer.active.order("slug ASC").drop(8).each do |designer| %>
+                <li>
+                  <label class="boolean optional control-label checkbox" for="<%= designer.name %>">
+                    <input type="checkbox" value="<%= designer.slug %>" name="designers[]" <%= 'checked' if params[:designers] && params[:designers].include?(designer.slug) %>/><%= designer.name %>
+                  </label>
+                </li>
+              <% end %>
+              </ul>
+              <a data-toggle="collapse" href="#collapseDesigners" aria-expanded="false" aria-controls="collapseDesigners"><strong>less</strong></a>
+            </div>
+            <a data-toggle="collapse" href="#collapseDesigners" aria-expanded="false" aria-controls="collapseDesigners" class="nav-expand collapsed"><strong>more</strong></a>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="col-xs-12 col-sm-9 margin-top-xs col-listing pull-right">
+      <div class="row">
+        <% if @tag_detail %>
+        <div class="col-md-12 margin-bottom-md">
+          <%= cl_image_tag(@tag_detail.cover.path, width: 1200, crop: 'fit', :class => 'img-responsive') %>
+          <div class="row-cover-text"> <%= @tag_detail.description.html_safe %></div>
+        </div>
+        <% end %>
+        <div class="container-project">
+          <% @projects.each do |project| %>
+            <%= render "designers/project", project: project %>
+          <% end %>
+        </div>
+      </div>
+      <div class="row text-right">
+        <%= will_paginate @projects, renderer: BootstrapPagination::Rails %>
+      </div>
+    </div>
+  </div>
+</div>
+<% content_for :javascript_include do %>
+<script src="//cdn.jsdelivr.net/jquery.infinitescroll/2.0b2/jquery.infinitescroll.min.js"></script>
+<% end %>
+<% content_for :javascript do %>
+$("#toggleFilterBtn").on("click", function(e){
+  e.preventDefault();
+  $(".col-filters").toggleClass("hide");
+  $(".col-listing").toggleClass("col-sm-12 col-sm-9");
+});
+$('#filters-form input, #designers-form input').on('ifChanged', function(e){
+  e.preventDefault();
+  var filter_tags = $('#filters-form input:checked').map(function(){return $(this).val();}).get().join("+");
+  var category_tags = $('#categories-form input:checked').map(function(){return $(this).val();}).get().join("+");
+  var designers = $('#designers-form input:checked').map(function(){return $(this).val();}).get().join("+");
+  window.location.href = (window.location.pathname === "/shop" ? "/shop/" : window.location.pathname.match(/.*\//)) +
+    category_tags.length > 0 ? category_tags + "/" : "" +
+    filter_tags +
+    (designers.length > 0 ? "?designers=" + designers : "");
+});
+$('.container-project').infinitescroll({
+  loading     : {
+    msgText      : '<em>Loading more designs &hellip;</em>',
+    finishedMsg  : "This is the end, beautiful friend. This is the end, my only friend, the end &hellip;"
+  },
+  navSelector  : "ul.pagination",
+  nextSelector : "li.next a",
+  itemSelector : ".project-thumbnail"
+});
+<% end %>
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Viewed List Page");
+}
+<% end %>

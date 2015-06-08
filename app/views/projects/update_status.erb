@@ -1,0 +1,57 @@
+<% content_for :opengraph do %>
+  <% if !@order.blank? %>
+    <meta property="og:title" content="I just bought some awesome products on QREOH" />
+    <meta property="og:image" content="<%= cloudinary_url(@order.projects.first.selfie.path) if @order.projects.first.selfie? %>" />
+    <meta property="og:description" content="QREOH - A Platform to Discover Independent Designers. Find awesome products created by the most special designers." />
+    <meta property="og:url" content="http://www.qreoh.com" />
+    <meta property="og:site_name" content="QREOH" />
+  <% end %>
+<% end %>
+<div class="container container-top">
+  <div class="row">
+    <div class="col-md-offset-3 col-md-6 col-sm-offset-2 col-sm-8 col-xs-offset-1 col-xs-10">
+      <% if @success && !@order.blank? %>
+      <h1 class="text-lg">Awesome!</h1>
+      <h2>Thanks for supporting independent designers;</h2>
+      <br>
+      <p>Your order has been successfully placed and your order number is <strong><%= @order.id %></strong> and the confirmation code is <strong><%= @order.confirm_code %></strong>.</p>
+      <p>No need to memorize it, we have sent you a confirmation email at <strong class="text-uppercase"><%= @order.user.email %></strong></p>
+      <p>We will update you as soon as your order is shipped, which should happen by <%= @order.shipping_date.strftime('%A, %B %e, %Y') %>.</p>
+      <br>
+      <p>If you have any questions, you can contact us right <strong><a href="/contact-us">here</a></strong>.</p>
+      <br><br>
+      <% else %>
+      <h1 class="text-lg">Whoops! Something went wrong...</h1>
+      <h2>But we are on it.</h2>
+      <p>You may also <strong><a href="/contact-us">contact us</a></strong> to get a quicker resolution.</p>
+      <% end %>
+    </div>
+  </div>
+  <% if !@order.blank? %>
+    <div class="row">
+      <% @order.projects.each do |project| %>
+      <%= render "project", project: project %>
+      <% end %>
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 margin-top-md hide">
+        <p>Why not tell your friends?</p>
+        <div class="row">
+          <div class="col-md-8">
+            <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="button"></div>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-8">
+            <a href="#" class="btn btn-twitter btn-block" target="_blank"><span><i class="fa fa-twitter fa-2x"></i></span><div>Tweet</div></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>
+
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Viewed Payment Success Page");
+}
+<% end %>

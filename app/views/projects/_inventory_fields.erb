@@ -1,0 +1,6 @@
+<div class="row nested-fields">
+  <div class="col-md-2"><%= f.input :size, label: false, :input_html => { :placeholder => 'S, M, L, XL,...', :data => { :required => true } } %></div>
+  <div class="col-md-4"><%= f.input :total, label: false, :as => :string, :input_html => { :placeholder => '0', :data => { :required => true, :type => "number" } } %></div>
+  <div class="col-md-3"><%= f.input :sold, label: false, :as => :string, :input_html => { :placeholder => '0', :data => { :required => true, :type => "number" } } %></div>
+  <div class="col-md-3"><%= link_to_remove_association "Delete", f, :class => 'btn btn-primary btn-sm' %></div>
+</div>

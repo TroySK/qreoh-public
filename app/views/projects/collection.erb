@@ -1,0 +1,22 @@
+<% content_for :title do %>
+  <title><%= sanitize(params[:collection]) %> | QREOH</title>
+<% end %>
+<div class="container container-top">
+  <div class="row">
+    <div class="col-md-12 margin-top-md">
+      <div class="row">
+        <% @projects.each do |project| %>
+          <%= render "projects/project", project: project %>
+        <% end %>
+      </div>
+      <div class="row text-right">
+        <%= will_paginate @projects, renderer: BootstrapPagination::Rails %>
+      </div>
+    </div>
+  </div>
+</div>
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Viewed Collections Page");
+}
+<% end %>

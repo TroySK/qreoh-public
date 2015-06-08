@@ -1,0 +1,88 @@
+<div class="container container-top">
+  <h1 class="text-lg">Manage Your Projects</h1>
+  <div class="pull-right">
+    <a href="<%= designer_url(@designer) %>" class="btn btn-primary">Back to Profile</a> 
+    <a href="<%= new_designer_project_url(@designer) %>" class="btn btn-primary">New Project</a><br><br>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <table class="table table-striped table-bordered table-responsive table-manage">
+        <thead>
+          <tr>
+            <td width="10%">SKU Code</td>
+            <td width="35%">Project</td>
+            <td width="20%">Brownie Points</td>
+            <td width="20%">Inventory</td>
+            <td width="5%">Price</td>
+            <td width="5%">Sale Price</td>
+            <td width="5%">On Sale</td>
+          </tr>
+        </thead>
+        <tbody>
+          <% @designer.projects.each do |project| %>
+            <tr>
+              <td class="text-center">
+                <%= best_in_place([@designer, project], :code) %><br>
+                <a href="<%= designer_project_url(@designer, project) %>">
+                <% if project.selfie? %>
+                <%= cl_image_tag(project.selfie.path, size: '75x75', :alt => project.title.titlecase, :crop => :fill) %>
+                <% else %>
+                <%= image_tag(project.project_photos.first.image.thumb.url, size: '75x75', :alt => project.title.titlecase) if project.project_photos.first %>
+                <% end %>
+                </a>
+                <br><br>
+                <a href="<%= edit_designer_project_url(@designer, project) %>" class="btn btn-primary btn-sm">Edit</a>
+              </td>
+              <td>
+                <strong>Title:</strong> <%= best_in_place([@designer, project], :title) %><br>
+                <strong>Slogan:</strong> <%= best_in_place([@designer, project], :desc) %><br>
+                <strong>Description:</strong> <%= best_in_place([@designer, project], :description) %>
+              </td>
+              <td>
+                <strong>Color:</strong> <%= best_in_place([@designer, project], :color) %><br>
+                <strong>Material:</strong> <%= best_in_place([@designer, project], :material) %><br>
+                <strong>Care Instructions:</strong> <%= best_in_place([@designer, project], :material_details) %><br>
+                <strong>Time to Ship:</strong> <%= best_in_place([@designer, project], :production_days) %><br>
+              </td>
+              <td>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <td width="33%"><strong>Size</strong></td>
+                      <td width="33%"><strong>Total</strong></td>
+                      <td width="33%"><strong>Sold</strong></td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <% project.inventories.each do |inventory| %>
+                  <tr>
+                    <td><strong><%= best_in_place([@designer, project, inventory], :size)%></strong></td>
+                    <td><%= best_in_place([@designer, project, inventory], :total)%></td>
+                    <td><%= best_in_place([@designer, project, inventory], :sold)%></td>
+                  </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+              </td>
+              <td><%= best_in_place([@designer, project], :base_price) %></td>
+              <td><%= best_in_place([@designer, project], :discounted_price) %></td>
+              <td><%= best_in_place([@designer, project], :on_sale, :as => :checkbox) %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<% content_for :javascript do %>
+$('.best_in_place').best_in_place();
+$('.best_in_place').bind("ajax:success", function (){
+  $.bootstrapGrowl("Saved!", {
+    type: 'info',
+    align: 'right',
+    width: 'auto',
+    offset: {from: 'top', amount: 50},
+    allow_dismiss: true
+  });
+});
+<% end %>

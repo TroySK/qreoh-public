@@ -1,0 +1,113 @@
+<div class="container container-top">
+  <h1 class="text-lg">Confirm your order</h1>
+  <p>Please check your shipping address and select a preferred mode of payment.</p>
+  <% if !@order.confirmed %>
+  <div class="row">
+    <div class="col-md-12">
+      <p>One more step and you're good!</p>
+      <% if @shipping_address.domestic? %>
+        <a href="<%= @order.instamojo_link %>" class="btn btn-primary btn-lg">Proceed to payment</a>
+      <h2>OR</h2>
+      <p><a href="/cod" class="btn btn-primary">Pay with COD</a></p>
+      <% else %>
+      <p><%= link_to "Proceed to payment", @order.paypal_link(local_currency), :title => "PayPal – The safer, easier way to pay online.", :class => "btn btn-primary btn-lg" %></p>
+      <% end %>
+    </div>
+  </div>
+  <% end %>
+  <div class="row">
+    <div class="col-md-8 col-sm-12 col-xs-12">
+      <h2 class="text-md">Your Order</h2>
+      <div class="row hidden-sm hidden-xs">
+        <div class="col-md-2 text-uppercase"><strong>Project</strong></div>
+        <div class="col-md-6 text-uppercase"><strong>Details</strong></div>
+        <div class="col-md-2 text-uppercase"><strong>Size</strong></div>
+        <div class="col-md-2 text-uppercase"><strong>Price</strong></div>
+      </div>
+      <% @order.shopping_cart.shopping_cart_items.each do |item| %>
+      <div class="row row-line-item" >
+        <div class="col-md-2 col-sm-4 col-xs-4">
+          <% if item.project.selfie? %>
+          <%= cl_image_tag(item.project.selfie.path, size: '100x100', :crop => :fill, :class => 'img-responsive') %>
+          <% else %>
+          <%= image_tag item.project.project_photos.first.image.thumb.url, :class => 'img-responsive' %>
+          <% end %>
+        </div>
+        <div class="col-md-6 col-sm-4 col-xs-4">
+          <h1><%= item.project.title %></h1>
+          <h2><%= item.project.designer.name %></h2>
+        </div>
+        <div class="col-md-4 col-sm-4 col-xs-4">
+          <div class="row">
+            <div class="col-md-6 col-sm-6 col-xs-6">
+              <p class="text-uppercase"><%= item.details[:size] %></p>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-6">
+              <p><%= local_price_with_symbol(item.price) %></p>
+            </div>
+          </div>
+          <div class="row">
+            <textarea class="text-autosave" data-item="<%= item.id %>" placeholder="Add a message for the designer."><%= item.details[:message] %></textarea>
+          </div>
+        </div>
+      </div>
+      <% end %>
+      <div class="row margin-top-md">
+        <div class="col-md-offset-6 col-md-6">
+          <table class="table text-uppercase table-total">
+            <tr>
+              <td>Sub-total</td>
+              <td><%= local_price_with_symbol(@order.shopping_cart.total) %></td>
+            </tr>
+            <tr>
+              <td>Discount</td>
+              <td><%= local_price_with_symbol(@order.shopping_cart.order.discount) %></td>
+            </tr>
+            <tr>
+              <td>Shipping</td>
+              <td><%= local_price_with_symbol(@order.shipping_cost(local_currency)) %></td>
+            </tr>
+            <tr class="bg-info">
+              <td>Total</td>
+              <td><%= local_price_with_symbol(@order.shopping_cart.order.amount + @order.shipping_cost(local_currency)) %></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 col-sm-12 col-xs-12">
+      <h2 class="text-md">Your Shipping Address</h2>
+      <p><%= @shipping_address.name %></p>
+      <p><%= [@shipping_address.address1, @shipping_address.address2].join(', ') %></p>
+      <p><%= [@shipping_address.city, @shipping_address.state].join(', ') %></p>
+      <p><%= @shipping_address.country %></p>
+      <p>Zip Code - <%= @shipping_address.zipcode %></p>
+      <p>Phone No. - <%= @shipping_address.phone_number %></p>
+      <p><a href="<%= checkout_url %>">Edit Address ></a></p>
+    </div>
+  </div>
+</div>
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag "https://www.zwitch.co/api/secure/zwitch.js" %>
+<% end %>
+<% content_for :javascript do %>
+$(".row-line-item").on("change", "textarea", function(e){
+  e.preventDefault();
+  $.ajax({
+    url: "/customize/" + $(this).data("item"),
+    type: "POST",
+    data: {"message": $(this).val()}
+  }).done(function(){
+    $.bootstrapGrowl("Saved!", {
+        type: 'info',
+        align: 'right',
+        width: 'auto'
+    });
+  });
+});
+<% end %>
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Viewed Shipping Page");
+}
+<% end %>

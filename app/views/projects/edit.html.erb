@@ -1,0 +1,310 @@
+<% content_for :stylesheet_links do %>
+  <%= stylesheet_link_tag "//cdn.jsdelivr.net/select2/3.5.2/select2.css" %>
+<% end %>
+<% content_for :title do %>
+  <title><%= "#{@project.title} by #{@project.designer.name}" %> | QREOH</title>
+<% end %>
+<div class="container container-top">
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <div class="row">
+        <div class="col-md-12 form-project">
+          <div class="text-center">
+            <a href="#" class="btn btn-primary" id="tutorialBtn">Help Guide</a>
+            <br><br>
+          </div>
+          <% if current_user && current_user.is_admin? %>
+          <div class="panel panel-default">
+            <div class="panel-heading">Admin Actions</div>
+            <div class="panel-body">
+              <h4>Project Status: <%= best_in_place([@project.designer, @project], :status, :type => :select, :collection => { 0 => 'UNPUBLISHED', 1 => 'ACTIVE', 2 => 'HIDDEN', 3 => 'ARCHIVED' } ) %></h4>
+              <h4>Project Category: <%= best_in_place([@project.designer, @project], :category_id, :type => :select, :collection => Project::CATEGORIES.invert) %></h4>
+              <h4>Project Taxonomy: <%= best_in_place([@project.designer, @project], :taxonomy, :type => :select, :collection => Project::TAXONOMIES.invert) %></h4>
+              <h4>Project Start Date: <%= best_in_place([@project.designer, @project], :start_date) %></h4>
+            </div>
+          </div>
+          <% end %>
+          <div class="panel panel-default">
+            <div class="panel-heading">Project Photos</div>
+            <%= simple_form_for ([@project.designer, @project]), :html => { :multipart => true } do |f| %>
+              <div class="panel-body">
+                <div class="row" data-intro="Upload the primary photo of the product. To replace, remove it and then upload it again." data-step="1">
+                  <div class="col-md-12">
+                    <%= f.input :selfie, as: :attachinary, :label => 'Primary Photo' %>
+                  </div>
+                </div>
+                <div class="row" data-intro="Upload the additional photos of the product. 4-6 would be optimum." data-step="2">
+                  <div class="col-md-12">
+                    <%= f.input :photos, as: :attachinary, :label => 'Secondary Photos' %>
+                  </div>
+                </div>
+                <div class="row" data-intro="Enter the YouTube URL of the product.">
+                  <div class="col-md-12">
+                    <%= f.input :youtube_url, :label => 'YouTube URL' %>
+                  </div>
+                  <% if current_user && current_user.is_admin? %>
+                  <div class="col-md-12">
+                    <%= f.input :tag_list, :label => 'Tags' %>
+                  </div>
+                  <% end %>
+                </div>
+              </div>
+              <div class="panel-footer">
+                <div class="row" data-intro="Once changes are made. Remember to save your changes." data-step="3">
+                  <div class="col-md-12">
+                    <%= f.button :submit, :value => "Save", :class => 'btn btn-primary btn-sm' %>
+                  </div>
+                </div>
+              </div>
+            <% end %>
+          </div>
+          <% if @project.ooak? %>
+          <div class="panel panel-default">
+            <div class="panel-heading">Inventory Details</div>
+            <%= simple_form_for ([@project.designer, @project]), :html => { :multipart => true } do |f| %>
+              <div class="panel-body" data-intro="The inventory details. Your stock details go here. You can come back and update this. Press delete to remove the row details." data-step="4">
+                <div class="row">
+                  <div class="col-md-2 text-uppercase"><strong>Size</strong></div>
+                  <div class="col-md-4 text-uppercase"><strong>Total Stock</strong></div>
+                  <div class="col-md-3 text-uppercase"><strong>Sold</strong></div>
+                  <div class="col-md-3 text-uppercase"><strong>Actions</strong></div>
+                </div>
+                <%= f.simple_fields_for :inventories do |inventory| %>
+                  <%= render 'inventory_fields', :f => inventory %>
+                <%end %>
+                <div class="text-right" data-intro="To add a new inventory size and quantity, press this button." data-step="6">
+                  <%= link_to_add_association 'Add Row', f, :inventories, :class => 'btn btn-sm btn-primary' %>
+                </div>
+              </div>
+              <div class="panel-footer" data-intro="Once all changes are done. Remember to save, it will save your changes and also save you from the Oh No! moment later on ;)" data-step="7">
+                <%= f.button :submit, :value => "Save", :class => 'btn btn-primary btn-sm' %>
+              </div>
+           <% end %>
+          </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-12 col-project">
+      <h1 data-intro="The Product Title! Keep it stylish they say. We recommend not changing this. If you do, go back to the page where you came from and then come back again. Changing the title makes the page go crazy! Think what would happen if you had to change your name! Phew..." data-step="8"><%= best_in_place([@project.designer, @project], :title, :place_holder => 'The Title! No one likes a boring one.') %></h1>
+      <h2 data-intro="Hahah! You can't change this! We love you and won't let you change, :D" data-step="9"><%= link_to(@project.designer.name, designer_url(@project.designer)) %></h2>
+      <h3 data-intro="The price/cost of your product. This should include the 10% QREOH fees." data-step="10"><i class="fa fa-inr"></i> <%= best_in_place([@project.designer, @project], :base_price, :place_holder => 'The price and make sure its right!') %></h3>      
+      <% unless @project.ooak? %>
+      <hr>
+      <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-6" data-intro="Pre-orders sometimes require a minimum number of orders before they can go into production. What would be the minimum for this product? That number goes right here!" data-step="11">
+          <h4><%= best_in_place([@project.designer, @project], :quantity, :place_holder => '0') %></h4>
+          <span class="text-uppercase">Minimum quantity required</span>
+        </div>
+        <div class="col-md-6 col-sm-6 col-xs-6" data-intro="In how many days do you expect the minimum orders to come in? Select a period not more than 45 days, it might make the buyers skeptical." data-step="12">
+          <h4><%= best_in_place([@project.designer, @project], :duration, :place_holder => '30') %></h4>
+          <span class="text-uppercase">Production Days</span>
+        </div>
+      </div>
+      <% end %>
+      <hr>
+      <p data-intro="Sell directly from inventory; the unique of a kind items; or take pre-orders? If you are not sure check the tooltips below. Changing this will refresh the page. But don't worry, its good. Its all good. :)" data-step="13"><strong>Sale Type: </strong><%= best_in_place([@project.designer, @project], :ooak, :type => :select, :collection => {true => "One of a Kind", false => "Pre-Order"}, :place_holder => "Select a type of sales", :classes => 'projectTypeChange') %></p>
+      <p>
+        <strong>What do they mean?</strong>
+        <small><strong><a href="#" class="text-popover" tabindex="0" data-toggle="popover" data-trigger="hover" data-content="ONE OF A KIND items are unique fast selling products. The designer has made only pieces of the product. ONE OF A KIND items are part of QREOH SHOP and ready to be shipped." data-title="ONE OF A KIND" data-placement="bottom">One of A Kind</a></strong></small>
+        <small><strong><a href="#" class="text-popover" tabindex="0" data-toggle="popover" data-trigger="hover" data-content="PRE-ORDER items are unique items up for crowdfunding. The designer makes them after you place your preorder. PRE-ORDER items are part of QREOH LABS and have a slightly longer shipping schedule." data-title="PRE-ORDER" data-placement="bottom">PRE-ORDER</a></strong></small>
+      </p>
+      <h5 data-intro="The code with which you uniquely indentify the product. The one you might be using to get it manufactured from the factory. BTW, SKU means Stock Keeping Unit, we never knew that. We call it CODE." data-step="14"><strong>SKU: </strong><%= best_in_place([@project.designer, @project], :code, :place_holder => 'The code you use to keep track of the product in your inventory.') %></h5>
+      <p data-intro="The short description. Try to describe your product in 140 characters or less. Easy to tweet or instragram!" data-step="15"><strong><%= best_in_place([@project.designer, @project], :desc, :type => :textarea, :place_holder => 'The short description. Think how you would describe it in a tweet!') %></strong></p>
+      <p data-intro="The main description of the product. Describe it well. You have put in a lot of effort to make the product, now put in a little more to describe it well." data-step="16"><%= best_in_place([@project.designer, @project], :description, :type => :textarea, :place_holder => 'The main description of the product. Make it stand out. The more you write the best it is!') %></p>
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="active"><a href="#item-details" role="tab" data-toggle="tab">Item Details</a></li>
+          </ul>
+          <hr>
+          <div class="tab-content">
+            <div class="tab-pane active" id="item-details">
+              <p data-intro="What materials were used, like cotton, nylon, linen." data-step="17"><strong>Materials used: </strong><%= best_in_place([@project.designer, @project], :material, :place_holder => 'The primary materials.') %></p>
+              <p data-intro="Washing instructions, other warnings or even more details about the materail of your product. They all go here." data-step="18"><strong>Material instructions: </strong><%= best_in_place([@project.designer, @project], :material_details, :type => :textarea, :place_holder => 'Washing instructions and material details.') %></p>
+              <p data-intro="The primary colors present in _this_ product. If you have other color options this is _not_ the place for that. Create a new product in that case. :)" data-step="19"><strong>Colors: </strong><%= best_in_place([@project.designer, @project], :color, :place_holder => 'The primary colors present.') %></p>
+              <p data-intro="How many days to ship? We recommend within 10 days. Our logistics partner will get the product from you and ship it to the customer." data-step="20"><strong>Time to ship: </strong><%= best_in_place([@project.designer, @project], :production_days, :place_holder => 'The number of days to produce and ship. Default is 10.') %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel panel-default" id="projectSizeText">
+        <div class="panel-heading">Measurement Details <small class="pull-right">(You can copy/paste from Word/Excel)</small></div>
+        <div class="panel-body" data-intro="The measurement details for the sizes of your products. It is also known as the Size Chart. You can copy paste from Word/Excel/Web/Notebook, etc." data-step="21">
+          <div class="text-box"><%= raw(@project.size_text.blank? ? @project.designer.projects.active.last.try(:size_text).to_s : @project.size_text.to_s) %></div>
+        </div>
+        <div class="panel-footer" data-intro="Save. Save. Save. Save the data, so that we also know what the details are. ;) Phew, that's all! This was the last step of the tutorial." data-step="22">
+          <a href="#" class="btn btn-primary btn-sm">Save</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid">
+  <div class="row margin-bottom-lg">
+    <div class="col-md-10 col-md-offset-1">
+      <h5 class="text-uppercase"><strong>By The Same Designer</strong></h5>
+      <div id="designer-projects-carousel" class="carousel slide" data-interval="false">
+        <div class="carousel-inner">
+          <% @current_projects = @project.related_projects %>
+          <% @current_projects.each_slice(4) do |projects| %>
+          <div class="item <%= 'active' if @current_projects[0] == projects[0] %>">
+            <div class="row">
+              <% projects.each do |project| %>
+              <%= render "project", project: project %>
+              <% end %>
+            </div>
+          </div>
+          <% end %>
+        </div>
+        <a class="left carousel-control" href="#designer-projects-carousel" data-slide="prev"><i class="fa fa-angle-left fa-5x"></i></a>
+        <a class="right carousel-control" href="#designer-projects-carousel" data-slide="next"><i class="fa fa-angle-right fa-5x"></i></a>
+      </div>
+    </div>
+  </div>
+</div>
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag "jquery.hotkeys.js", "bootstrap-wysiwyg.js", "//cdn.jsdelivr.net/intro.js/1.0.0/intro.min.js", "//cdn.jsdelivr.net/select2/3.5.2/select2.min.js" %>
+<% end %>
+<% content_for :javascript do %>
+<% if @project.designer.projects.size <= 1 %>
+introJs().start();
+<% end %>
+$("#tutorialBtn").on("click", function(e){
+  e.preventDefault();
+  introJs().start();
+});
+$('.attachinary-input').attachinary({
+  pasteZone: null
+});
+$('.best_in_place').best_in_place();
+$('.best_in_place').bind("ajax:success", function (){
+  $.bootstrapGrowl("Saved!", {
+    type: 'info',
+    align: 'right',
+    width: 'auto',
+    offset: {from: 'top', amount: 50},
+    allow_dismiss: true
+  });
+});
+$('.projectTypeChange').bind("ajax:success", function(){
+  location.reload(true);
+});
+// $.datepicker.setDefaults({dateFormat: "yy-mm-dd"});
+$('#projectSizeText .text-box').wysiwyg();
+$('#projectSizeText').on('click', 'a.btn', function(e){
+  e.preventDefault();
+  $.ajax({
+    url: "<%= designer_project_url(@project.designer, @project) %>",
+    data: {project: {size_text: $(this).parent().parent().find('.text-box').cleanHtml()}},
+    dataType: 'json',
+    type: 'PUT'
+  }).done(function(){
+    $.bootstrapGrowl("Saved!", {
+      type: 'info',
+      align: 'right',
+      width: 'auto',
+      offset: {from: 'top', amount: 50},
+      allow_dismiss: true
+    });
+  });
+});
+<% if current_user && current_user.is_admin? %>
+$('#project_tag_list').select2({tags:["Sale",
+"Party",
+"New-In",
+"Outerwear",
+"Bottoms",
+"Back-In-Stock",
+"QREOH-Fav",
+"Accessories",
+"Bags",
+"Purses",
+"Beauty",
+"Blazers",
+"Coats",
+"Jackets",
+"Curve",
+"Denim",
+"Dresses",
+"Hoodies",
+"Sweatshirts",
+"Jeans",
+"Jewellery",
+"Watches",
+"Jumpers",
+"Cardigans",
+"Jumpsuits",
+"Underwear",
+"Lingerie",
+"Nightwear",
+"Maternity",
+"Petite",
+"Shirts",
+"Blouses",
+"Shoes",
+"Shorts",
+"Skirts",
+"Socks",
+"Formal",
+"Sunglasses",
+"Swimwear",
+"Beachwear",
+"T-Shirts",
+"Vests",
+"Tops",
+"Trousers",
+"Leggings",
+"Gifts",
+"Hats",
+"Belts",
+"Ties",
+"Bow Ties",
+"Caps",
+"Cape",
+"Gloves",
+"Headband",
+"Headscarf",
+"Scarves",
+"Snoods",
+"Necklaces",
+"Bracelet",
+"Ring",
+"Sweatshirts",
+"Casual",
+"Summer",
+"Sweatpants",
+"Earring",
+"Retro",
+"Knitwear",
+"Winter",
+"Spring",
+"Fall",
+"Neo-punk",
+"Minimal",
+"Prints",
+"Tie-Dye",
+"Western",
+"Discover",
+"Travel",
+"Must-Have",
+"Wardrobe-Essential",
+"Exclusive",
+"Nude",
+"Statement-Piece",
+"High-Waist",
+"Pyjamas",
+"Cotton",
+"Transparent",
+"Cut",
+"Crop-top",
+"Colorblock",
+"Embroideries",
+"Tunic",
+"Wrap",
+"Stripes",
+"Polka",
+"Men",
+"Women"]});
+<% end %>
+<% end %>

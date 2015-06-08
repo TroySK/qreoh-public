@@ -1,0 +1,24 @@
+<table class="table">
+  <thead>
+    <tr>
+      <td>Backer</td>
+      <td>Projects</td>
+      <td>Designers</td>
+      <td>Count</td>
+      <td>eMail</td>
+      <td>Phone</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @backers.each do |backer| %>
+      <tr>
+        <td><%= backer.orders.last.try(:shipping_address).blank? ? 'N.A.' : backer.orders.last.try(:shipping_address).try(:name) %><br></td>
+        <td><%= backer.orders.collect{|o| o.project.title }.join(', ') %></td>
+        <td><%= backer.orders.collect{|o| o.project.designer.name }.join(', ') %></td>
+        <td><%= backer.orders.where({:confirmed => true}).count %></td>
+        <td><%= backer.try(:user).try(:email) %></td>
+        <td><%= backer.orders.last.try(:shipping_address).try(:phone_number) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,6 @@
+      <ul class="nav nav-pills nav-stacked">
+        <li class="<%= 'active' if defined?(favorites) %>"><a href="<%= favorites_url %>">Favorites</a></li>
+        <li class="<%= 'active' if defined?(orders) %>"><a href="<%= orders_url %>">My Orders</a></li>
+        <li class="<%= 'active' if defined?(messages) %>"><a href="<%= messages_url %>">My Messages</a></li>
+        <li class="<%= 'active' if defined?(edit_profile) %>"><a href="<%= url_for :edit_user_registration %>">Edit Profile</a></li>
+      </ul>

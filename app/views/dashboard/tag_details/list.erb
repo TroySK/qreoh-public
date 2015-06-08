@@ -1,0 +1,41 @@
+<table class="table">
+  <thead>
+    <tr>
+      <td>Tag ID</td>
+      <td>Tag</td>
+      <td>Description</td>
+      <td>Cover</td>
+      <td>Actions</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @tag_details.each do |tag_detail| %>
+      <tr>
+        <td><%= tag_detail.tag.id %></td>
+        <td><%= tag_detail.tag.name %></td>
+        <td><%= tag_detail.description %></td>
+        <td><%= cl_image_tag(tag_detail.cover.path, size: '200x75', :crop => :fit) %></td>
+        <td>
+          <%= simple_form_for(tag_detail, :url => dashboard_tag_detail_url(tag_detail.id), :method => :delete) do |f| %>
+            <%= f.button :submit, :value => "Delete", :class => 'btn btn-qreoh btn-preorder' %>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<h2>Create a Tag Detail</h2>
+<%= simple_form_for TagDetail.new, :url => dashboard_tag_details_url do |f| %>
+  <%= f.input :tag_id, label: 'Tag', collection: @remaining_tags %>
+  <%= f.input :description %>
+  <%= f.input :cover, as: :attachinary %>
+  <%= f.button :submit %>
+<% end %>
+<% content_for :javascript do %>
+  <script>
+  $(function(){
+    $('.attachinary-input').attachinary();
+  });
+  </script>
+<% end %>

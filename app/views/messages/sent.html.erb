@@ -1,0 +1,31 @@
+<div class="container container-top">
+  <div class="row">
+    <h1 class="text-lg">Messages</h1>
+    <p>Communicate with designers</p>
+    <div class="row">
+      <div class="col-md-3">
+        <%= render "accounts/sidebar", messages: true %>
+      </div>
+      <div class="col-md-9">
+        <ul class="nav nav-pills">
+          <li><a href="<%= messages_url %>">New</a></li>
+          <li class="active"><a href="<%= messages_sent_url %>">Sent</a></li>
+          <li><a href="<%= messages_archive_url %>">Archives</a></li>
+        </ul>
+        <br>
+        <div class="row">
+          <div class="col-md-12">
+            <% @messages.each do |message| %>
+              <div class="panel panel-default">
+                <div class="panel-heading">You asked <strong><%= message.try(:recipient).try(:designer).try(:name) %></strong> about <%= message.project.title rescue 'you' %></div>
+                <div class="panel-body">
+                  <p><%= message.message %></p>
+                </div>
+              </div>                
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

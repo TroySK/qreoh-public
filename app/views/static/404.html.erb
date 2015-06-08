@@ -1,0 +1,11 @@
+<div class="container container-top">
+  <h1>OOPS! We can't find the page you're looking for.</h1>
+  <br><br><br><br>
+  <p class="text-center">Whenever lost, I go back <a href="/"><strong>home</strong></a>.</p>
+  <br><br><br><br>
+</div>
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Viewed 404 Page");
+}
+<% end %>

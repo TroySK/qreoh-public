@@ -1,0 +1,26 @@
+.navbar { margin-bottom: 0; }
+.navbar-inner { border-radius: 0; }
+.well { border-radius: 0; height: 100%; margin-bottom: 0; background-color: #222022; border: none; }
+.sidebar-nav { width: 18%; display: inline-table; }
+.main-body { width: 81%; display: inline-block; vertical-align: top; }
+.nav-list > li > a, .nav-list .nav-header { text-shadow: none;}
+ul.admin-actions li { list-style: none; text-transform: none; color: #fff; font-size: 14px; font-weight: 100; }
+body { font-family: 'Droid Sans', sans-serif; font-size: 12px; }
+ul, li, ol { list-style:none;}
+hr {border-top: 3px dotted #000; width: 97%; margin: auto; }
+hr.thinner { margin: 10px auto; }
+h4 { font-family: 'Droid Sans'; font-weight: 700; font-size: 14px; text-transform: uppercase; }
+h5 { font-family: 'Droid Sans'; font-weight: 700; font-size: 18px; text-transform: uppercase; }
+h1 { font-family: 'Droid Sans'; font-weight: 700; font-size: 24px; text-transform: uppercase; letter-spacing: 3px; }
+select, input[type="text"], input[type="password"], input[type="datetime"], input[type="datetime-local"], input[type="date"], input[type="month"], input[type="time"], input[type="week"], input[type="number"], input[type="email"], input[type="url"], input[type="search"], input[type="tel"], input[type="color"], .uneditable-input { height: 30px; }
+.form-horizontal input { width: 70%; }
+.form-inputs { /*padding-top: 20px;*/ }
+.control-label { text-transform: uppercase; /*padding-top: 30px;*/ }
+.control-group { margin-bottom: 0; }
+input, #content textarea, #content label { border-radius:0; border-width: 1px; border-color: #ececec; letter-spacing: 1px; webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none;}
+input:focus, #content textarea:focus{ border-color: #000; }
+input, #content textarea { font-size: 12px; }
+::-webkit-input-placeholder { font-style: italic; color: #000; font-size: 12px; }
+:-moz-placeholder { /* Firefox 18- */ font-style: italic; color: #000; font-size: 12px; }
+::-moz-placeholder {  /* Firefox 19+ */ font-style: italic; color: #000; font-size: 12px; }
+:-ms-input-placeholder { font-style: italic; color: #000; font-size: 12px; }

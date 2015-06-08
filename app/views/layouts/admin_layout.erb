@@ -1,0 +1,168 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:og="http://ogp.me/ns#"
+      xmlns:fb="https://www.facebook.com/2008/fbml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>QREOH Dashboard</title>
+  <%= favicon_link_tag "favicon.png" %>
+  <link href="//maxcdn.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet" media="all">
+  <link href='//fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Open+Sans+Condensed:300,300italic,700' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link href='//fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css'>
+
+  <%= stylesheet_link_tag "admin.css", :media => "all" %>
+
+  <%= yield :stylesheet %>
+</head>
+<body>
+  <div class="navbar navbar-inverse">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="/" name="top">QREOH</a>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li><a href="<%= dashboard_url %>"><i class="icon-home icon-white"></i> Home</a></li>
+            <li class="divider-vertical"></li>
+            <li><a href="<%= dashboard_designers_url %>"><i class="icon-user icon-white"></i> Designers</a></li>
+            <li class="divider-vertical"></li>
+            <li><a href="<%= dashboard_projects_url %>"><i class="icon-star-half-empty icon-white"></i> Projects</a></li>
+            <li class="divider-vertical"></li>
+            <li><a href="<%= dashboard_orders_url %>"><i class="icon-signal icon-white"></i> Orders</a></li>
+            <li class="divider-vertical"></li>
+            <li><a href="<%= dashboard_tag_details_url %>"><i class="icon-tag icon-white"></i> Tags</a></li>
+            <li class="divider-vertical"></li>
+            <li><a href="<%= dashboard_messages_url %>"><i class="icon-envelope icon-white"></i> Messages</a></li>
+            <li class="divider-vertical"></li>
+            <li><a href="<%= dashboard_coupons_url %>"><i class="icon-ticket icon-white"></i> Coupons</a></li>
+            <li class="divider-vertical"></li>
+          </ul>
+          <div class="btn-group pull-right">
+            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+              <i class="icon-user"></i> <%= current_user.email.gsub(/@.*/, '') %>  <span class="caret"></span>
+            </a>
+            <ul class="dropdown-menu">
+              <!-- <li><a href="#"><i class="icon-wrench"></i> Settings</a></li>
+              <li class="divider"></li> -->
+              <li><%= link_to("Logout", destroy_user_session_path, method: :delete) %></li>
+            </ul>
+          </div>
+        </div>
+        <!--/.nav-collapse -->
+      </div>
+      <!--/.container-fluid -->
+    </div>
+    <!--/.navbar-inner -->
+  </div>
+  <!--/.navbar -->
+  <div class="sidebar-nav">
+    <div class="well">
+      <ul class="nav nav-list"> 
+        <li class="nav-header">Designers
+          <ul class="admin-actions">
+            <li><a href="<%= pending_dashboard_designers_url %>">Pending Approval</a></li>
+            <li><a href="<%= active_dashboard_designers_url %>">Active</a></li>
+            <li><a href="<%= hidden_dashboard_designers_url %>">Hidden</a></li>
+            <li><a href="<%= current_collection_dashboard_designers_url %>">Current Collections</a></li>
+          </ul>
+        </li>
+        <li class="nav-header">Projects
+          <ul class="admin-actions">
+            <li><a href="<%= pending_dashboard_projects_url %>">Pending Approval</a></li>
+            <li><a href="<%= active_dashboard_projects_url %>">Active</a></li>
+            <li><a href="<%= hidden_dashboard_projects_url %>">Hidden</a></li>
+            <li><a href="<%= archived_dashboard_projects_url %>">Archived</a></li>
+            <li><a href="<%= report_dashboard_projects_url %>">Report</a></li>
+          </ul>
+        </li>
+        <li class="nav-header">Orders
+          <ul class="admin-actions">
+            <li><a href="<%= pending_dashboard_orders_url %>">Pending</a></li>
+            <li><a href="<%= confirmed_dashboard_orders_url %>">Confirmed</a></li>
+          </ul>
+        </li>
+        <li class="nav-header">Messages
+          <ul class="admin-actions">
+            <li><a href="<%= dashboard_messages_url %>">Latest</a></li>
+            <li><a href="<%= archived_dashboard_messages_url %>">Archived</a></li>
+            <li><a href="<%= trashed_dashboard_messages_url %>">Trashed</a></li>
+          </ul>
+        </li>
+        <li class="nav-header">Coupons
+          <ul class="admin-actions">
+            <li><a href="<%= dashboard_coupons_url %>">Latest</a></li>
+            <li><a href="<%= used_dashboard_coupons_url %>">Used</a></li>
+            <li><a href="<%= active_dashboard_coupons_url %>">Active</a></li>
+          </ul>
+        </li>
+        <li class="nav-header">Tag Details
+          <ul class="admin-actions">
+            <li><a href="<%= dashboard_tag_details_url %>">Latest</a></li>
+          </ul>
+        </li>
+        <!-- <li class="nav-header">Content</li> -->
+      </ul>
+    </div>
+  </div>
+  <div id="content" class="main-body">
+    <div class="row-fluid">
+      <ul class="breadcrumb">
+        <li><a href="<%= url_for(:controller => params[:controller]) %>"><%= params[:controller].titlecase.gsub('Dashboard/', '') %></a> <span class="divider">/</span></li>
+        <li><a href="<%= url_for(:controller => params[:controller], :action => params[:action]) %>"><%= params[:action].titlecase %></a></li>
+      </ul>
+    </div>
+    <%= yield %>
+  </div>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+  <%= javascript_include_tag "jquery.bootstrap-growl" %>
+  <%= csrf_meta_tag %>
+  <%= javascript_include_tag :application %>
+  <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+  <![endif]-->
+  <%= cloudinary_js_config %>
+  <%= yield :javascript %>
+  <script type="text/javascript">
+  $(function(){
+    $('.sidebar-nav').height($('#content').height());
+    $(document).ajaxError(function(event, jqxhr, settings, exception){
+      if(exception === "Unauthorized"){
+        $.bootstrapGrowl("You are not loggedin. Please <a href='/users/sign_in'>login</a> to continue.", {
+          type: 'error',
+          align: 'right',
+          width: 'auto',
+          delay: 99999,
+          allow_dismiss: true
+        });
+      }
+    });
+
+    <%- if msg = flash[:info] || flash[:notice] %>
+    $.bootstrapGrowl("<%= msg.html_safe %>", {
+      type: "info",
+      align: 'right',
+      offset: {from: 'top', amount: 50},
+      allow_dismiss: false
+    });
+    <% end -%>
+    <%- if msg = (flash[:error] || flash[:alert]) %>
+    $.bootstrapGrowl("<%= msg.html_safe %>", {
+      type: "error",
+      align: 'right',
+      offset: {from: 'top', amount: 50},
+      allow_dismiss: true,
+      delay: 999999
+    });
+    <% end -%>
+  });
+
+  </script>
+</body>
+</html>

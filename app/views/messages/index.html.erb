@@ -1,0 +1,48 @@
+<div class="container container-top">
+  <div class="row">
+    <h1 class="text-lg">Messages</h1>
+    <p>Communicate with designers</p>
+    <div class="row">
+      <div class="col-md-3">
+        <%= render "accounts/sidebar", messages: true %>
+      </div>
+      <div class="col-md-9">
+        <ul class="nav nav-pills">
+          <li class="active"><a href="<%= messages_url %>">New</a></li>
+          <li><a href="<%= messages_sent_url %>">Sent</a></li>
+          <li><a href="<%= messages_archive_url %>">Archives</a></li>
+        </ul>
+        <br>
+        <div class="row">
+          <div class="col-md-12">
+            <% @messages.each do |message| %>
+            <div class="panel panel-default">
+              <div class="panel-heading">You asked <strong><%= message.try(:recipient).try(:designer).try(:name) %></strong> about <%= message.project.title rescue 'you' %></div>
+              <div class="panel-body">
+                <p><%= message.message %></p>
+              </div>
+              <div class="panel-footer">
+                <div class="row">
+                  <div class="col-md-12">
+                    <a data-toggle="collapse" data-target="#reply<%= message.id %>" class="btn btn-primary btn-sm">Reply</a>
+                    <a href="/messages/delete/<%= message.id %>" class="padding-left-20" data-method="delete" rel="nofollow">Archive</a>
+                    <div id="reply<%= message.id %>" class="collapse">
+                      <%= simple_form_for @message, :url => '/messages/send', :html => { :class => 'form-vertical', :multipart => true } do |f| %>
+                        <%= f.input :project_id, :as => :hidden, :input_html => {:value => message.project_id } %>
+                        <%= f.input :recipient_id, :as => :hidden, :input_html => {:value => message.user_id} %>
+                        <%= f.input :user_id, :as => :hidden, :input_html => {:value => message.recipient_id} %>
+                        <%= f.input :message, :input_html => {"rows" => 5 } %>
+                        <%= f.button :submit, 'Send', :class => 'btn btn-primary btn-sm' %>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>                
+            </div>                
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

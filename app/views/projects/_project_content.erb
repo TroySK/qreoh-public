@@ -1,0 +1,45 @@
+<div class="tile-project <%= 'tile-sold-out' if project.sold_out? %>">
+  <a href="<%= designer_project_url(project.designer, project) %>">
+    <% if project.selfie? %>
+    <%= cl_image_tag(project.selfie.path, size: '240x240', :alt => project.title.titlecase, :crop => :fill, :class => 'img-responsive') %>
+    <% else %>
+    <%= image_tag project.project_photos.first.image.thumb.url, :alt => project.title.titlecase, :class => 'img-responsive' if project.project_photos.first %>
+    <% end %>
+    <p class="price"><%= local_price_with_symbol(project.price) %> <% if project.on_sale? %> <span class="mrp"><%= local_price_with_symbol(project.base_price) %></span><% end %></p>
+    <% if project.ooak %>
+    <p class="text-uppercase">
+      <strong>
+        <% if project.sold_out? %>
+        Sold Out!
+        <% else %>
+        Only <%= project.current_stock %> Left!
+        <% end %>
+      </strong>
+    </p>
+    <% else %>
+    <div class="preorder-percent">
+      <span class="span-left" style="width:<%= [0, [100, project.completion_percentage].min].max %>%"></span>
+      <span class="span-right" style="width:<%= [0, (100 - project.completion_percentage)].max %>%"></span>
+    </div>
+    <br>
+    <% end %>
+    <h5><%= project.title %></h5>
+    <h6><%= project.designer.name %></h6>
+    <span class="text-center span-favorite">
+      <% if current_user && current_user.favorites.collect(&:project_id).include?(project.id) %>
+        <i class="fa fa-heart fa-2x" data-project=<%= project.id %> title="Favorite"></i>
+      <% else %>
+        <i class="fa fa-heart-o fa-2x" data-project=<%= project.id %>></i>
+      <% end %>
+    </span>
+  </a>
+  <p class="taglist">
+    <small>
+      <strong>
+      <% project.tag_list.each do |tag|%>
+        <span><a href="<%= shop_url %>/<%= tag %>" title="Browse <%= tag %>"><%= tag %></a> </span>
+      <% end %>
+      </strong>
+    </small>
+  </p>
+</div>

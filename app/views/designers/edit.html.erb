@@ -1,0 +1,123 @@
+<div class="container container-top">
+  <h1 class="text-lg">Introduce Yourself</h1>
+  <p>Start by creating your label page. Tell people about who you are, where is your label based, share your website address and social pages.</p>
+  <p>For your label image you can upload your label logo, a picture of yourself or an example of your work. You will be able to update this image as often as you want.</p>
+  <br>
+  <a href="#" class="btn btn-primary" id="tutorialBtn">Take a tour</a>
+  <br>
+  <br>
+  <div class="row">
+    <div class="col-md-12">
+      <%= simple_form_for @designer, :html => { :data => { "validate" => "parsley" }, :class => 'form-vertical', :multipart => true } do |f| %>
+        <div class="row">
+          <div class="col-md-6" data-intro="Your Label Name. The Brand!" data-step="1">
+            <%= f.input :user_id, :as => :hidden, :input_html => {:value => @designer.user_id} %>
+            <%= f.input :name, label: 'Label Name', :input_html => { :data => { :required => "true", "required-message" => "What do you want yourself to be know by?" }, "autocomplete" => "off" } %>
+          </div>
+          <div class="col-md-6" data-intro="Where are you located. Your city." data-step="2">
+            <%= f.input :location, :input_html => { :data => { "required" => "true" }, "autocomplete" => "off" } %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6" data-intro="The logo/profile photo of your Label. Click remove to change the image." data-step="3">
+            <%= f.input :photo, as: :attachinary, label: "Profile Photo", :input_html => { :data => {:required => true, "required-message" => "Please upload your profile picture" } } %>
+          </div>
+          <div class="col-md-6" data-intro="The cover photo for your label. Will be used across the site. Preferably 1500x465. Click remove to change." data-step="4">
+            <%= f.input :cover_photo, as: :attachinary, label: "Cover Photo", :input_html => { :data => {:required => true, "required-message" => "Please upload a cover photo" } } %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12" data-intro="About the Label. Share your story, your inspiration, your dreams." data-step="5">
+            <%= f.input :about, label: 'About', :input_html => { :data => { "required" => "true" }, :rows => 10}, placeholder: 'Give a short bio for yourself, explain your label values, ...' %>
+          </div>
+        </div>
+        <div class="row" data-intro="Where do we find you on the web? Your touchpoints." data-step="6">
+          <div class="col-md-12">
+            <label class="text optional control-label" for="designer_about">Presence</label>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-home"></i></span>
+              <%= f.input_field :website, "data-type" => "url" , "autocomplete" => "off", :placeholder => 'Website' %>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-facebook"></i></span>
+              <%= f.input_field :facebook, "data-type" => "url" , "autocomplete" => "off", :placeholder => 'Facebook Page' %>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-instagram"></i></span>
+              <%= f.input_field :instagram, "data-type" => "url" , "autocomplete" => "off", :placeholder => 'Instagram Profile' %>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-twitter"></i></span>
+              <%= f.input_field :twitter, "data-type" => "url" , "autocomplete" => "off", :placeholder => 'Twitter Profile URL' %>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-pinterest"></i></span>
+              <%= f.input_field :pinterest, "data-type" => "url" , "autocomplete" => "off", :placeholder => 'Pinterest Profile' %>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-linkedin"></i></span>
+              <%= f.input_field :linkedin, "data-type" => "url" , "autocomplete" => "off", :placeholder => 'LinkedIn Profile' %>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-behance"></i></span>
+              <%= f.input_field :behance, "data-type" => "url" , "autocomplete" => "off", :placeholder => 'Behance Profile' %>
+            </div>
+          </div>
+          <div class="col-md-3">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="fa fa-slideshare"></i></span>
+              <%= f.input_field :slideshare, "data-type" => "url" , "autocomplete" => "off", :placeholder => 'SlideShare Profile' %>
+            </div>
+          </div>
+        </div>
+        <div class="row" data-intro="Our agreement in simple words. Please read them carefully. We won't give you any surprises, we promise. :)" data-step="7">
+          <div class="col-md-12">
+            <p>Only authorized representatives may administer a Label page for a brand, entity (place or organization), or public figure. The material used as profile picture shall not be copyrighted unless the administrator of the label page owns the rights.<p>
+            <p>Content posted to a Label page is public and viewable by everyone who can see the Label page.</p>
+            <p>If you collect content and information directly from users, you will make it clear that you (and not QREOH) are collecting it, and you will provide notice about and obtain user consent for your use of the content and information that you collect. Regardless of how you obtain content and information from users, you are responsible for securing all necessary permissions to reuse their content and information.</p>
+            <p>You will not collect users' content or information, or otherwise access QREOH, using automated means (such as harvesting bots, robots, spiders, or scrapers) without our permission.</p>
+            <p>We will only process name changes and migrations on explicit demand of the Label page administrator through QREOH Contact Form.</p>
+            <p>Third-party advertisements on QREOH Pages are prohibited, without our prior permission.</p>
+            <br>
+            <h4 class="text-uppercase"><strong>QREOH takes 10% commission on every successful sale and helps with payments, packaging and shipping.</strong></h4>
+          </div>
+        </div>
+        <br>
+        <p><strong>By clicking 'Save &amp; Continue' you agree to have read and understood the <a href="/terms-and-conditions">Terms and Conditions</a> of QREOH, as well as the Terms of Use for the Label page listed above.</strong></p>
+        <div class="row" data-intro="Save to continue." data-step="8">
+          <div class="col-md-offset-4 col-md-4 text-center">
+            <%= f.button :submit, 'Save & Continue', :class => 'btn btn-primary btn-lg btn-block' %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<% content_for :javascript_include do %>
+<%= javascript_include_tag "parsley", "//cdn.jsdelivr.net/intro.js/1.0.0/intro.min.js" %>
+<% end %>
+
+<% content_for :javascript do %>
+<% if @designer.new_record? %>
+introJs().start();
+<% end %>
+$("#tutorialBtn").on("click", function(e){
+  e.preventDefault();
+  introJs().start();
+});
+$('.attachinary-input').attachinary();
+<% end %>

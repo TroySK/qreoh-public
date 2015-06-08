@@ -1,0 +1,22 @@
+<div class="span3 block">
+  <div class="designer-block">
+    <a href="<%= (designer_url(@designer) rescue '') %>">
+    <% if @designer.photo? %>
+      <%= cl_image_tag(@designer.photo.path, size: '240x240', :crop => :pad) %>
+    <% else %>
+      <%= image_tag(@designer.avatar.thumb.url, size: '240x240') %>
+    <% end %>
+    </a>
+    <a href="<%= (designer_url(@designer) rescue '') %>">
+      <div class="box">
+        <h3><%= @designer.name %></h3>
+      </div>
+    </a>
+    <a href="<%= (designer_url(@designer)) %>">
+      <div class="detail">
+        <h6><%= @designer.location %></h6>
+        <p>See her collection &gt;</p>
+      </div>
+    </a>
+  </div>
+</div>

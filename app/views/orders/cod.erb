@@ -1,0 +1,32 @@
+<div class="container container-top">
+  <div class="row">
+    <div class="col-md-offset-3 col-md-6 col-sm-offset-2 col-sm-8 col-xs-offset-1 col-xs-10">
+      <% if !@order.blank? %>
+      <h1 class="text-lg">Awesome!</h1>
+      <h2>Thanks for supporting independent designers;</h2>
+      <br>
+      <p>Your order has been successfully placed and your order number is <strong><%= @order.id %></strong>. We will be giving you a call soon to confirm the order.</p>
+      <br>
+      <p>If you have any questions, you can contact us right <strong><a href="/contact-us">here</a></strong>.</p>
+      <br><br>
+      <% else %>
+      <h1 class="text-lg">Whoops! Something went wrong...</h1>
+      <h2>But we are on it.</h2>
+      <p>You may also <strong><a href="/contact-us">contact us</a></strong> to get a quicker resolution.</p>
+      <% end %>
+    </div>
+  </div>
+  <% if !@order.blank? %>
+    <div class="row">
+      <% @order.projects.each do |project| %>
+      <%= render "projects/project", project: project %>
+      <% end %>
+    </div>
+  <% end %>
+</div>
+
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Viewed COD Page");
+}
+<% end %>

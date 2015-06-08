@@ -1,0 +1,11 @@
+<form action="<%= notify_shipping_dashboard_order_url(@order) %>" method="POST">
+<div style="margin:0;padding:0;display:inline">
+  <input name="utf8" type="hidden" value="✓">
+  <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+</div>
+Name <%= @order.shipping_address.name.split(' ').first %>,<br>
+Courier <input type="text" name="courier" value="<%= 'DTDC' %>"> <br>
+Tracking URL <input type="text" name="tracking_url" value="<%= 'http://dtdc.com/tracking/tracking_results.asp' %>"> <br>
+Tracking code <input type="text" name="tracking_code" value="<%= 'Z28834662'%>"><br>
+<input type="submit" value="Send" class="btn btn-qreoh btn-preorder">
+</form>

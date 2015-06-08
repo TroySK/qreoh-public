@@ -1,0 +1,21 @@
+<div class="container container-top">
+  <h1 class="text-lg">Forgot Your Password?</h1>
+  <p>Ever so often we forget to remember those pesky passwords. To cope with the ever increasing list of passwords which we forget; the following 'Recover Password' box was invented. Enter your eMail address into the box and a magical link to set a new password will be emailed to you.</p>
+  <div class="row">
+    <div class="col-lg-offset-4 col-lg-4 col-md-offset-4 col-md-4 col-sm-offset-3 col-sm-6 col-xs-offset-2 col-xs-8">
+      <%= simple_form_for(resource, as: resource_name, url: password_path(resource_name), html: { method: :post }) do |f| %>
+      <div class="panel panel-primary">
+        <div class="panel-heading">Recover Password</div>
+        <div class="panel-body">
+          <%= f.error_notification %>
+          <%= f.input :email, :label => 'Your eMail', autofocus: true %>
+        </div>
+        <div class="panel-footer">
+          <%= f.button :submit, "Abracadabra", :class => "btn btn-primary", :title => 'Press to get a password reset link' %>
+        </div>
+      </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+<%= render "devise/shared/links" %>

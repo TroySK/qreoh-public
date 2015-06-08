@@ -1,0 +1,55 @@
+<div class="container container-top">
+  <h1 class="text-lg">How does it work?</h1>
+  <p>QREOH is a platform to discover indepedent designers and their products. Designers showcase their products, and visitors can then place orders for the products they like.</p>
+  <br>
+  <p>QREOH is a marketplace two primary objectives.</p>
+  <ol>
+    <li>Help designers set up their own brands and sell their limited edition products.</li>
+    <li>Offer discerning patrons a range of carefully crafted products with contemporary design at their core.</li>
+  </ol>
+  <h1 class="bg-primary padding-10">What happens on QREOH</h1>
+  <div class="row">
+    <div class="col-md-6">
+      <h1>You're a Visitor</h1>
+      <p>QREOH is a platform for thoughtfully selected limited edition products. QREOH reaches out to design-savvy patrons looking for contemporary products from upcoming designers, at affordable prices, while ensuring the highest quality of production.</p>
+      <%= image_tag 'how_it_works1.jpg', :class => 'img-full-width' %>
+      <h1>Browse through unique designs</h1>
+      <p>You browse through the product range imagined by our awesome designers. If you like one, you can order it from the designer. Most products are limited editions and there is a sense of uniqueness to every product you see on QREOH.</p>
+      <%= image_tag 'how_it_works3.jpg', :class=> 'img-full-width' %>
+      <h1>Receive a carefully crafted product</h1>
+      <p>The estimated production time and delivery date are indicated on the project page, and the designer would post updates incase there are any delays.</p>
+    </div>
+    <div class="col-md-6">
+      <h1>You're a Designer</h1>
+      <p>QREOH is aiming at designers interested in starting their own brand, or have already started their label but want more visibility online. QREOH offers you a platform to bring your ideas to life by giving you tools to monetise your designs.
+      </p>
+      <%= image_tag "how_it_works2.jpg", :class=>"img-full-width" %>
+      <h1>Upload your designs and get orders</h1>
+      <p>Start by filling in your designer profile, followed by uploading your products details. Your product(s) will be showcased on the platform and buyers can place orders for them. Let all your patrons know where you are selling.</p>
+      <%= image_tag "how_it_works4.jpg", :class=>"img-full-width" %>
+      <h1>Produce &amp; Ship</h1>
+      <p>Once your product is ready to be shipped, you will have to send the product to the QREOH office in New Delhi. From there we will pack the product and dispatch them to the patron who had placed order.</p>
+    </div>
+  </div>
+  <p><strong>QREOH stands for quality products and unique designs. It aims at connecting patrons and designers by providing a user-friendy platform to showcase designs and browse through exclusive products. QREOH reviews projects prior to showcasing and works with the designer for the delivery for the product ordered or helps process a refund.</strong></p>
+  <br>
+  <h4 class="text-uppercase"><strong>QREOH takes 10% commission on every successful sale and helps with payments, packaging and shipping.</strong></h4>
+  <br>
+  <div class="row">
+    <div class="col-md-offset-3 col-md-3">
+      <a href="/" class="btn btn-primary btn-block">Browse Projects</a>
+    </div>
+    <div class="col-md-3">
+      <% if current_user and current_user.designer.blank? %>
+      <a href="<%= new_designer_url %>" class="btn btn-primary btn-block">Create a designer profile</a>
+      <% else %>
+      <a href="/create/read" class="btn btn-primary btn-block">Submit a project</a>
+      <% end %>
+    </div>
+  </div>
+</div>
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Viewed Create/Look Page");
+}
+<% end %>

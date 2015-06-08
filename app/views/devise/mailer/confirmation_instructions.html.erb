@@ -1,0 +1,6 @@
+<h3>Hii <%= @email.gsub(/@.*/, '').capitalize %>!</h3>
+<p>Excited to have you on board. Before you begin your expedition on <a href="http://www.qreoh.com" target="_blank" title="QREOH">QREOH</a>, you will have to confirm your eMail. We promise to send you awesome news and zero spam. :)</p>
+<p><%= link_to('Confirm my account', confirmation_url(@resource, confirmation_token: @token), {:style => 'background:#000;color: #fff;text-decoration:none;padding:10px;'}) %></p>
+<p>If this is confusing, just reply to this email and we'd do our best to cure all your worries.</p>
+<p>Best,</p>
+<p>QREOH Happiness Gang.</p>

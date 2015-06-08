@@ -1,0 +1,504 @@
+<% content_for :opengraph do %>
+  <meta property="og:title" content="Shop <%= @project.title %> by <%= @project.designer.name %> | <%= @project.tag_list.join(", ") %>| QREOH" />
+  <% if @project.selfie?  %>
+  <meta property="og:image" content="<%= cloudinary_url(@project.selfie.path, :width => 1200, :crop => :fill) %>" />
+  <% end %>
+  <% if !@project.project_photos.first.blank? %>
+  <meta property="og:image" content="<%= @project.project_photos.first.image.medium.url %>" />
+  <% end %>
+  <% @project.photos.each do |photo| %>
+  <meta property="og:image" content="<%= cloudinary_url(photo.path, :width => 1200, :crop => :fill) %>" />
+  <% end %>
+  <meta property="og:description" content="<%= @project.og_description %>" />
+  <meta property="og:url" content="<%= @project.url %>" />
+  <meta property="og:site_name" content="QREOH" />
+  <meta property="og:type" content="product" />
+  <meta name="description" content="Shop <%= @project.title %> by <%= @project.designer_name %> <%= @project.og_description %>">
+  <meta name="keywords" content="<%= @project.tag_list.join(", ") %>">
+<% end %>
+<% content_for :title do %>
+  <title><%= "#{@project.title} by #{@project.designer.name}" %> | Shop <%= @project.tag_list.join(" ") %> | Designerwear on QREOH</title>
+<% end %>
+<div class="container container-top">
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <div class="row">
+        <div class="col-md-12 col-images">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="m-scooch m-fluid m-scooch-photos">
+                <div class="m-scooch-inner">
+                <% if @project.selfie? %>
+                  <div class="m-item m-active">
+                    <a href="<%= cloudinary_url(@project.selfie.path, :width => 1200, :crop => :fill) %>" class="magnifik">
+                      <%= cl_image_tag(@project.selfie.path, :width => 600, :crop => :fill) %>
+                    </a>
+                  </div>
+                  <% @project.photos.each do |photo| %>
+                  <div class="m-item">
+                    <a href="<%= cloudinary_url(photo.path, :width => 1200, :crop => :fill) %>" class="magnifik">
+                      <%= cl_image_tag(photo.path, :width => 600, :crop => :fill) %>
+                    </a>
+                  </div>
+                  <% end %>
+                <% elsif !@project.project_photos.first.blank? %>
+                  <div class="m-item m-active">
+                    <a href="<%= @project.project_photos.first.image.larger.url %>" class="magnifik">
+                      <%= image_tag(@project.project_photos.first.image.medium.url) %>
+                    </a>
+                  </div>
+                  <% @project.project_photos.drop(1).each do |photo| %>
+                  <div class="m-item">
+                    <a href="<%= photo.image.larger.url %>" class="magnifik">
+                      <%= image_tag(photo.image.medium.url) %>
+                    </a>
+                  </div>
+                  <% end %>
+                <% end %>
+                </div>
+                <div class="m-scooch-controls m-scooch-bulleted row row-thumbnails">
+                <% if @project.selfie? %>
+                  <div class="col-xs-3">
+                    <a href="#" data-m-slide="1" class="m-active"><%= cl_image_tag(@project.selfie.path, :size => '150x150', :crop => :fill) %></a>
+                  </div>
+                  <% @project.photos.each.with_index(2) do |photo, index| %>
+                  <div class="col-xs-3">
+                    <a href="#" data-m-slide="<%= index %>"><%= cl_image_tag(photo.path, :size => '150x150', :crop => :fill) %></a>
+                  </div>
+                  <% end %>
+                <% elsif !@project.project_photos.first.blank? %>
+                  <div class="col-xs-3">
+                    <a href="#" data-m-slide="1" class="m-active"><%= image_tag(@project.project_photos.first.image.thumb.url) %></a>
+                  </div>
+                  <% @project.project_photos.drop(1).each.with_index(2) do |photo, index| %>
+                  <div class="col-xs-3">
+                    <a href="#" data-m-slide="<%= index %>"><%= image_tag(photo.image.thumb.url) %></a>
+                  </div>
+                  <% end %>
+                <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <br>
+          <% @project.tag_list.each do |tag| %>
+            <a href="/shop/<%= tag %>" title="<%= tag %>" class="badge"><strong><%= tag %></strong></a>
+          <% end %>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-4 col-xs-11 favorite-block">
+          <br>
+          <% if current_user and current_user.favorites.collect(&:project_id).include?@project.id %>
+          <a href="/favorite/<%= @project.id %>" class="favorited btn btn-sm btn-primary btn-block">Favorited</a>
+          <% else %>
+          <a href="/favorite/<%= @project.id %>" class="favorite btn btn-sm btn-primary btn-block">Favorite</a>
+          <% end %>
+          <div class="popover right popover-sticky-sm" role="tooltip"><div class="arrow"></div><div class="popover-content"><strong><%= @project.favorites.count %></strong></div></div>
+        </div>
+      </div>
+      <div class="row">
+        <br><br>
+        <div class="col-md-12 sharing-block">
+          <span class='st_fblike_hcount' displayText='Facebook Like'></span>
+          <span class='st_facebook_hcount' displayText='Facebook'></span>
+          <span class='st_twitter_hcount' displayText='Tweet' st_via='qreoh'></span>
+          <span class='st_pinterest_hcount' displayText='Pinterest'></span>
+          <span class='st_fashiolista_hcount' displayText='Fashiolista'></span>
+          <span class='st_tumblr_hcount' displayText='Tumblr'></span>
+          <span class='st_plusone_hcount' displayText='Google +1'></span>
+          <span class='st_whatsapp_hcount' displayText='WhatsApp'></span>
+          <span class='st_email_hcount' displayText='Email'></span>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-12 col-project">
+      <h1><%= @project.title %></h1>
+      <h2><%= link_to(@project.designer.name, designer_url(@project.designer)) %></h2>
+      <h3><%= local_price_with_symbol(@project.price) %> <% if @project.on_sale? %><span class="mrp"><%= local_price_with_symbol(@project.base_price) %></span><% end %></h3>
+      <hr>
+      <div class="row">
+        <div class="col-md-6 col-sm-6 col-xs-6">
+          <% if @project.sold_out? %>
+          <h4 class="text-uppercase">Sold Out!</h4>
+          <% else %>
+          <h4><%= @project.current_stock %></h4>
+          <span class="text-uppercase"><%= 'Item'.pluralize(@project.current_stock) %> Left</span>
+          <% end %>
+        </div>
+        <% unless @project.ooak? %>
+        <div class="col-md-6 col-sm-6 col-xs-6">
+          <h4><%= @project.remaining_days %></h4>
+          <span class="text-uppercase"><%= 'Day'.pluralize(@project.remaining_days) %> to go</span>
+        </div>
+        <% end %>
+      </div>
+      <hr>
+      <% if @project.ooak? %>
+      <p>This is an <span class="text-uppercase">One of a Kind</span> item <small><strong><a href="#" class="text-popover" tabindex="0" data-toggle="popover" data-trigger="hover" data-content="ONE OF A KIND items are unique fast selling products. The designer has made only pieces of the product. ONE OF A KIND items are part of QREOH SHOP and ready to be shipped." data-title="ONE OF A KIND" data-placement="bottom">What does that mean?</a></strong></small></p>
+      <% else %>
+      <p>This is a <span class="text-uppercase">Pre-order</span> item <small><strong><a href="#" class="text-popover" tabindex="0" data-toggle="popover" data-trigger="hover" data-content="PRE-ORDER items are unique items up for crowdfunding. The designer makes them after you place your preorder. PRE-ORDER items are part of QREOH LABS and have a slightly longer shipping schedule." data-title="PRE-ORDER" data-placement="bottom">What does that mean?</a></strong></small></p>
+      <% end %>
+      <% if !@project.code.blank? %>
+      <h5><strong>SKU:</strong> <%= @project.code %></h5>
+      <% end %>
+      <% if !@project.desc.blank? %>
+      <p><strong><%= @project.desc %></strong></p>
+      <% end %>
+      <% if !@project.description.blank? %>
+      <p><%= @project.description %></p>
+      <% end %>
+      <form accept-charset="UTF-8" action="/checkout" enctype="multipart/form-data" id="newOrder" method="post">
+        <div style="margin:0;padding:0;display:inline">
+          <input name="utf8" type="hidden" value="✓">
+          <input name="authenticity_token" type="hidden" value="<%= form_authenticity_token %>">
+          <input name="project_id" type="hidden" value="<%= @project.id %>">
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+          <% if @project.ooak? %>
+            <select name="size" data-required="true" data-error-container="#size-error-container" data-error-message="Please select a Size" class="form-control input-lg">
+            <% if @project.inventories.blank? %>
+              <option value="Free Size">Free Size</option>
+            <% else %>
+              <option value="">Select Size</option>
+              <% @project.inventories.order("id").each do |inventory| %>
+                <% if inventory.total.to_i - inventory.sold.to_i > 0 %>
+              <option value="<%= inventory.size %>"><%= inventory.size %></option>
+                <% end %>
+              <% end %>
+            <% end %>
+            </select>
+          <% else %>
+            <input type="text" name="size" data-required="true" data-error-container="#size-error-container" data-error-message="Please enter a size" class="form-control input-lg" placeholder="Your Size">
+          <% end %>
+          <p id="size-error-container" class="text-info">&nbsp;</p>
+          </div>
+          <div class="col-md-6 padding-top-8">
+          <% if !@project.size_text.blank? or !@project.youtube_url.blank? %>
+            <small><strong><a data-target="#sizeChart" data-toggle="modal" href="#">Size Guide</a></strong></small>
+          <% end %>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-5">
+          <% if @project.active? %>
+            <% if @project.ooak? %>
+              <% if !@project.sold_out? %>
+              <!-- <input type="submit" class="btn btn-lg btn-primary btn-block" value="Buy Now"> -->
+              <% end %>
+            <% else %>
+              <!-- <input type="submit" class="btn btn-lg btn-primary btn-block" value="Pre-Order"> -->
+            <% end %>
+          <% elsif current_user %>
+            <% if @project.can_edit?(current_user) %>
+              <a class="btn btn-lg btn-primary btn-block" href="<%= edit_designer_project_url(@project.designer, @project) %>">Edit</a>
+            <% end %>
+          <% end %>
+          </div>
+        </div>
+      </form>
+      <div class="row">
+        <br><br>
+        <div class="col-md-12">
+          <ul id="tab-details" class="nav nav-tabs" role="tablist">
+            <li class="<%= 'active' unless params[:from] == 'email' %>"><a href="#designer" role="tab" data-toggle="tab">The Designer</a></li>
+            <li><a href="#item-details" role="tab" data-toggle="tab">Item Details</a></li>
+            <li><a href="#shipping" role="tab" data-toggle="tab">Shipping</a></li>
+            <li class="<%= 'active' if params[:from] == 'email' %>"><a href="#rating" role="tab" data-toggle="tab">Ratings</a></li>
+            <% if current_user && @project.is_owner?(current_user) && @project.ooak? %><li><a href="#inventory" role="tab" data-toggle="tab">Inventory</a></li><% end %>
+          </ul>
+          <hr>
+          <div class="tab-content">
+            <div class="tab-pane <%= 'active' unless params[:from] == 'email' %>" id="designer">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="clearfix media">
+                    <%= cl_image_tag(@project.designer.photo.path, size: '300x300', :crop => :pad, :class=> 'pull-left media-object img-responsive') if @project.designer.photo %>
+                    <h1><a href="<%= designer_url(@project.designer) %>"><%= @project.designer.name %></a></h1>
+                    <a href="<%= follow_designer_url(@project.designer) %>" class="btn btn-primary" data-method="post">
+                      <% if current_user && current_user.follows?(@project.designer) %>
+                      <i class="fa fa-user-times"></i> Unfollow
+                      <% else %>
+                      + Follow
+                      <% end %>
+                    </a>
+                    <br><br>
+                    <p><%= sanitize(@project.designer.about, tags: %w(a b strong br i em u)) %></p>
+                     <% unless @project.designer.website.blank? %>
+                    <p>Find me at: <strong><a href="<%= @project.designer.website %>" target="_blank"><%= @project.designer.website %></a></strong><p>
+                    <% end %>
+                    <div class="row">
+                      <div class="text-center">
+                        <% unless @project.designer.facebook.blank? %>
+                        <span class="fa-stack fa-md">
+                          <a href="<%= @project.designer.facebook %>" target="_blank">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                          </a>
+                        </span>
+                        <% end %>
+                        <% unless @project.designer.twitter.blank? %>
+                        <span class="fa-stack fa-md">
+                          <a href="<%= @project.designer.twitter %>" target="_blank">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                          </a>
+                        </span>
+                        <% end %>
+                        <% unless @project.designer.pinterest.blank? %>
+                        <span class="fa-stack fa-md">
+                          <a href="<%= @project.designer.pinterest %>" target="_blank">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-pinterest fa-stack-1x fa-inverse"></i>
+                          </a>
+                        </span>
+                        <% end %>
+                        <% unless @project.designer.linkedin.blank? %>
+                        <span class="fa-stack fa-md">
+                          <a href="<%= @project.designer.linkedin %>" target="_blank">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+                          </a>
+                        </span>
+                        <% end %>
+                        <% unless @project.designer.instagram.blank? %>
+                        <span class="fa-stack fa-md">
+                          <a href="<%= @project.designer.instagram %>" target="_blank">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+                          </a>
+                        </span>
+                        <% end %>
+                        <% unless @project.designer.behance.blank? %>
+                        <span class="fa-stack fa-md">
+                          <a href="<%= @project.designer.behance %>" target="_blank">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-behance fa-stack-1x fa-inverse"></i>
+                          </a>
+                        </span>
+                        <% end %>
+                        <% unless @project.designer.slideshare.blank? %>
+                        <span class="fa-stack fa-md">
+                          <a href="<%= @project.designer.slideshare %>" target="_blank">
+                            <i class="fa fa-square fa-stack-2x"></i>
+                            <i class="fa fa-slideshare fa-stack-1x fa-inverse"></i>
+                          </a>
+                        </span>
+                        <% end %>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-12">
+                        <br>
+                        <a href="<%= designer_url(@project.designer) %>" class="btn btn-primary btn-sm">Read More</a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="tab-pane" id="item-details">
+              <% if !@project.material.blank? %>
+              <p><strong>Materials: </strong> <%= @project.material %>.</p>
+              <% end %>
+              <% if !@project.material_details.blank? %>
+              <p><%= @project.material_details %></p>
+              <% end %>
+              <% if !@project.color.blank? %>
+              <p><strong>Colors: </strong><%= @project.color %></p>
+              <% end %>
+            </div>
+            <div class="tab-pane" id="shipping">
+              <div class="well well-sm text-center"><span>Shipping by <%= @project.shipping_date.strftime('%A, %B %e, %Y') %></span></div>
+              <p>Free Shipping in India.</p>
+              <p>Free International Shipping for all orders above $75.</p>
+              <p>For orders less than $75, international shipping starts at $10.</p>
+            </div>
+            <div id="inventory" class="tab-pane">
+              <% if current_user && @project.is_owner?(current_user) && @project.ooak? %>
+              <div class="panel panel-default">
+                <div class="panel-heading">Inventory Details</div>
+                <%= simple_form_for ([@project.designer, @project]), :html => { :multipart => true } do |f| %>
+                  <div class="panel-body" data-intro="The inventory details. Your stock details go here. You can come back and update this. Press delete to remove the row details." data-step="4">
+                    <div class="row">
+                      <div class="col-md-2 text-uppercase"><strong>Size</strong></div>
+                      <div class="col-md-4 text-uppercase"><strong>Total Stock</strong></div>
+                      <div class="col-md-3 text-uppercase"><strong>Sold</strong></div>
+                      <div class="col-md-3 text-uppercase"><strong>Actions</strong></div>
+                    </div>
+                    <%= f.simple_fields_for :inventories do |inventory| %>
+                      <%= render 'inventory_fields', :f => inventory %>
+                    <%end %>
+                    <div class="text-right" data-intro="To add a new inventory size and quantity, press this button." data-step="6">
+                      <%= link_to_add_association 'Add Row', f, :inventories, :class => 'btn btn-sm btn-primary' %>
+                    </div>
+                  </div>
+                  <div class="panel-footer" data-intro="Once all changes are done. Remember to save, it will save your changes and also save you from the Oh No! moment later on ;)" data-step="7">
+                    <%= f.button :submit, :value => "Save", :class => 'btn btn-primary btn-sm' %>
+                  </div>
+               <% end %>
+              </div>
+              <% end %>
+            </div>
+            <div class="tab-pane <%= 'active' if params[:from] == 'email' %>" id="rating">
+              <div class="row">
+                <div class="col-xs-2">Rating</div>
+                <div class="col-xs-4" data-read-only="<%= @readonly ? 'true' : 'false' %>"><%= rating_for @project, "product" %>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid margin-bottom-lg margin-top-md">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <h5 class="text-uppercase"><strong>By The Same Designer</strong></h5>
+      <div class="carousel-responsive">
+      <% @project.related_projects.each do |project| %>
+        <%= render "project", project: project %>
+      <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="sizeChartModalLabel" id="sizeChart" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title" id="sizeChartModalLabel">Size Guide</h4>
+      </div>
+      <div class="modal-body text-center">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <%= raw(@project.size_text) %>
+            <% unless @project.youtube_url.blank? %>
+              <iframe id="ytplayer" type="text/html" width="480" height="360" src="http://www.youtube.com/embed/<%= YoutubeID.from(@project.youtube_url) %>" frameborder="0"/></iframe>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="fb-root"></div>
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag "parsley", "bootstrap-tabcollapse", "scooch.min", "magnifik.min", "jquery.raty.js" %>
+<% end %>
+<% content_for :javascript do %>
+  $("#newOrder").parsley({
+    inputs: 'input, textarea, select',
+    excluded: ''
+  });
+  
+  //Favorite Actions
+  $(".favorite-block").on("click", ".favorite", function(e){
+    var that = $(this);
+    e.preventDefault();
+    $.ajax({
+      url: $(this).attr("href"),
+      type: "POST"
+    }).done(function(){
+      that.html("Favorited").addClass("favorited").removeClass("favorite");
+      $.bootstrapGrowl("Favorited!", {
+          type: 'info',
+          align: 'right',
+          width: 'auto'
+      });
+      that.parent().find('strong').text(parseInt(that.parent().find('strong').text(), 10) + 1);
+    });
+  });
+  $(".favorite-block").on("click", ".favorited", function(e){
+    var that = $(this);
+    e.preventDefault();
+    $.ajax({
+      url: $(this).attr("href") + "/delete",
+      type: "POST"
+    }).done(function(){
+      that.html("Favorite").addClass("favorite").removeClass("favorited");
+      $.bootstrapGrowl("Unfavorited!", {
+          type: 'info',
+          align: 'right',
+          width: 'auto'
+      });
+      that.parent().find('strong').text(parseInt(that.parent().find('strong').text(), 10) - 1);
+    });
+  });
+
+  // Images Scroller
+  $(".m-scooch").scooch();
+  $('a.magnifik').magnifik();
+  
+  $('#tab-details').tabCollapse();
+
+  // Ratings
+  $.fn.raty.defaults.path = "/assets"; 
+  $.fn.raty.defaults.half_show = true;  
+ 
+  $(".star").raty({
+    readOnly: function(){
+      return $(this).parent().data('read-only')
+    },
+    score: function(){
+      return $(this).attr('data-rating')
+    }, 
+    number: function() {
+      return $(this).attr('data-star-count')
+    },
+    click: function(score, evt) {
+      $.post('/rate', 
+      {
+        score: score, 
+        dimension: $(this).attr('data-dimension'),
+        id: $(this).attr('data-id'),
+        klass: $(this).attr('data-classname')
+      }, 
+      function(data) {
+          if(data) {
+            $.bootstrapGrowl("Thanks for your feedback!", {
+              type: 'info',
+              align: 'right',
+              width: 'auto'
+            });
+          }
+      });
+    }
+  });
+<% end %>
+<% content_for :javascript_tracking do %>
+  <% if @project.active? %>
+  if(typeof mixpanel !== 'undefined'){
+    mixpanel.track("Viewed Project Page", {"Project":"<%= @project.title %>"});
+  }
+  var google_tag_params = {
+    ecomm_prodid: "<%= @project.slug %>",
+    ecomm_pagetype: "<%= @project.designer.slug %>",
+    ecomm_totalvalue: "<%= @project.price.to_i.round %>",
+  };
+  var google_conversion_id = 965350045;
+  var google_custom_params = window.google_tag_params;
+  var google_remarketing_only = true;
+  <% end %>
+<% end %>
+<script type="text/javascript">var switchTo5x=true;</script>
+<script type="text/javascript" src="https://ws.sharethis.com/button/buttons.js"></script>
+<script type="text/javascript">
+  stLight.options({publisher: "cc6f4e9f-c50f-4c32-aa98-314249b870ad", doNotHash: false, doNotCopy: false, hashAddressBar: false});
+</script>
+<script type="text/javascript" src="//www.googleadservices.com/pagead/conversion.js"></script>
+<noscript>
+  <div style="display:inline;">
+  <img height="1" width="1" style="border-style:none;" alt="" src="//googleads.g.doubleclick.net/pagead/viewthroughconversion/965350045/?value=0&amp;guid=ON&amp;script=0"/>
+  </div>
+</noscript>

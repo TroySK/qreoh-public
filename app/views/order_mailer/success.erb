@@ -1,0 +1,75 @@
+<h3>Hii,</h3>
+<p>There has been a new order on QREOH!</p>
+<p>The order was made by <%= @order.user.name %> [<%= @order.user.email %>].</p>
+<p>The order ID is <%= @order.id %>.</p>
+<p>The order details are:</p>
+<table width="100%" style="width:100%;vertical-align:top;">
+  <tr>
+    <td style="width:75%;">
+      <h3 style="text-transform:uppercase;">Order</h3>
+      <table width="100%" style="width:100%;border-right:2px solid #eaeaea;vertical-align:top;">
+        <tr>
+          <td width="15%">Project</td>
+          <td width="40%">Description</td>
+          <td width="10%">Size</td>
+          <td width="10%">Price</td>
+          <td width="25%">Note</td>
+        </tr>
+        <% @order.shopping_cart.shopping_cart_items.each do |item| %>
+        <tr>
+          <td width="15%">
+            <% if item.project.selfie? %>
+            <%= cl_image_tag(item.project.selfie.path, size: '240x240', :alt => item.project.title, :crop => :fill, :style => 'width:75px;height:75px;border:2px solid #eaeaea;') %>
+            <% else %>
+            <%= image_tag(item.project.project_photos.first.image.thumb.url, :alt => item.project.title, :style => 'width:75px;height:75px;border:2px solid #eaeaea;') if item.project.project_photos.first %>
+            <% end %>
+          </td>
+          <td width="40%">
+            <h4 style="text-transform:uppercase;font-weight:700;"><%= item.project.title%></h4>
+            <h5 style="font-family:'Palatino',san-serif;text-transform:uppercase;"><%= item.project.designer.name %></h5>
+          </td>
+          <td width="10%" style="text-transform:uppercase;"><%= item.details[:size] %></td>
+          <td width="10%">Rs. <%= item.price.to_i %></td>
+          <td width="25%"><%= item.details[:message] %></td>
+        </tr>
+        <tr>
+          <td colspan="4" width="100%">
+            <hr style="border-color:#eaeaea;border-style:double;">
+          </td>
+        </tr>
+        <% end %>
+        <tr>
+          <td colspan="2"></td>
+          <td><strong>Subtotal</strong></td>
+          <td>Rs. <%= @order.shopping_cart.total.to_i %></td>
+        </tr>
+        <tr>
+          <td colspan="2"></td>
+          <td><strong>Discount</strong></td>
+          <td>Rs. <%= @order.discount.to_i %></td>
+        </tr>
+        <tr>
+          <td colspan="2"></td>
+          <td style="font-size:18px;"><strong>TOTAL</strong></td>
+          <td style="font-size:18px;">Rs. <%= @order.amount %></td>
+        </tr>
+      </table>
+    </td>
+    <td style="width:25%;">
+      <h3 style="text-transform:uppercase;margin-left:10px;">Shipping Address</h3>
+      <p style="margin-left: 10px;">
+        <%= @order.shipping_address.name %><br>
+        <%= [@order.shipping_address.address1, @order.shipping_address.address2].join(', ') %><br>
+        <%= [@order.shipping_address.city, @order.shipping_address.state].join(', ') %><br>
+        <%= @order.shipping_address.country %><br>
+        Zip Code - <%= @order.shipping_address.zipcode %><br>
+        Phone No. - <%= @order.shipping_address.phone_number %><br>
+      </p>
+    </td>
+  </tr>
+</table>
+<hr style="border-color:#000;">
+<h3>Have a gala time shipping!</h3>
+
+<p>Best,</p>
+<p>Skynet.</p>

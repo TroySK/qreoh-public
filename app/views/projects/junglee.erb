@@ -1,0 +1,85 @@
+<style>
+  table tr td { border: 1px solid #000; }
+</style>
+<table cellpadding="0" cellspacing="0">
+  <thead>
+    <tr>
+      <td>SKU</td>
+      <td>Title</td>
+      <td>Link</td>
+      <td>Price</td>
+      <td>Delivery Time</td>
+      <td>Recommended Browse Node</td>
+      <td>Category</td>
+      <td>Description</td>
+      <td>Shipping Cost</td>
+      <td>Image</td>
+      <td>List Price</td>
+      <td>Availability</td>
+      <td>Accepted Payment Methods</td>
+      <td>Brand</td>
+      <td>Special Features</td>
+      <td>Colour Name</td>
+      <td>Colour Map</td>
+      <td>Target Gender</td>
+      <td>Target Audience</td>
+      <td>Size Map</td>
+      <td>Material</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @projects.each do |project| %>
+      <% if project.inventories %>
+      <% project.inventories.each do |inventory| %>
+      <tr>
+        <td><%= (project.code.blank? ? 'QREOH' + project.id.to_s : project.code ) + "-" + inventory.size %></td>
+        <td><%= project.title.titlecase %></td>
+        <td><%= designer_project_url(project.designer, project) %></td>
+        <td><%= project.price.round %></td>
+        <td>3</td>
+        <td></td>
+        <td>ClothingAndAccessories</td>
+        <td><%= project.desc.to_s + project.description.to_s %></td>
+        <td>0</td>
+        <td><%= project.selfie? ? cloudinary_url(project.selfie.path, :width => 480, :height => 480) : 'http:' + project.project_photos.first.image.thumb.url %></td>
+        <td><%= project.price.round %></td>
+        <td>TRUE</td>
+        <td>credit_card|debit_card|net_banking</td>
+        <td><%= project.designer_name %></td>
+        <td></td>
+        <td><%= project.color %></td>
+        <td></td>
+        <td>female</td>
+        <td>women</td>
+        <td></td>
+        <td><%= project.material %></td>
+      </tr>
+      <% end %>
+      <% else %>
+      <tr>
+        <td><%= (project.code || 'QREOH' + project.id.to_s) %></td>
+        <td><%= project.title.titlecase %></td>
+        <td><%= designer_project_url(project.designer, project) %></td>
+        <td><%= project.price.round %></td>
+        <td>3</td>
+        <td></td>
+        <td>ClothingAndAccessories</td>
+        <td><%= project.desc.to_s + project.description.to_s %></td>
+        <td>0</td>
+        <td><%= project.selfie? ? cloudinary_url(project.selfie.path, :width => 480, :height => 480) : 'http:' + project.project_photos.first.image.thumb.url %></td>
+        <td><%= project.price.round %></td>
+        <td>TRUE</td>
+        <td>credit_card|debit_card|net_banking</td>
+        <td><%= project.designer_name %></td>
+        <td></td>
+        <td><%= project.color %></td>
+        <td></td>
+        <td>female</td>
+        <td>women</td>
+        <td></td>
+        <td><%= project.material %></td>
+      </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+</table>

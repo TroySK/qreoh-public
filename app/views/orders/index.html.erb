@@ -1,0 +1,75 @@
+<div class="container container-top">
+  <h1 class="text-lg">My Orders</h1>
+  <p>Manage your orders and payments.</p>
+  <div class="row">
+    <div class="col-md-3">
+      <%= render "accounts/sidebar", orders: true %>
+    </div>
+    <div class="col-md-9">
+      <%- @orders.each do |order| %>
+      <h1>Order <%= order.id %></h1>
+      <div class="row">
+        <div class="col-md-6">
+          <% order.shopping_cart.shopping_cart_items.each do |item| %>
+          <div class="media">
+            <a class="pull-left">
+              <% if item.project.selfie? %>
+              <%= cl_image_tag(item.project.selfie.path, size: '120x120', :crop => :pad) %>
+              <% else %>
+              <%= image_tag item.project.project_photos.first.image.thumb.url, :size => '120x120' %>
+              <% end %>
+            </a>
+            <div class="media-body">
+              <h4 class="media-heading"><%= item.project.title %></h4>
+              <h2><%= item.project.designer.name %></h2>
+              <p><strong>Size: </strong><%= item.details[:size] %></p>
+              <p><%= local_price_with_symbol(item.price) %></p>
+            </div>
+          </div>
+          <% end %>
+        </div>
+        <div class="col-md-3">
+          <p>
+            <% if order.confirmed %>
+            Paid via <%= order.payment_mode %>
+            <% else %>
+            <a href="<%= checkout_url %>" class="btn btn-primary">Checkout</a>
+            <% end %>
+          </p>
+          <table class="table table-condensed">
+            <tr>
+              <td>Total</td>
+              <td><%= local_price_with_symbol(order.shopping_cart.total) %></td>
+            </tr>
+            <tr>
+              <td>Discount</td>
+              <td><%= local_price_with_symbol(order.discount) %></td>
+            </tr>
+            <tr class="bg-primary">
+              <td>Net Payable</td>
+              <td><%= local_price_with_symbol(order.amount) %></td>
+            </tr>
+          </table>
+          <p>Ordered on <%= order.created_at.strftime("%d-%m-%Y") %></p>
+        </div>
+        <div class="col-md-3">
+          <% if !order.shipping_address.blank? %>
+          <p><%= order.shipping_address.name %></p>
+          <p><%= [order.shipping_address.address1, order.shipping_address.address2].join(', ') %></p>
+          <p><%= [order.shipping_address.city, order.shipping_address.state].join(', ') %></p>
+          <p><%= order.shipping_address.country %> - <%= order.shipping_address.zipcode %></p>
+          <p>Phone No. - <%= order.shipping_address.phone_number %></p>
+          <% end %>
+        </div>
+      </div>
+      <hr>
+      <% end -%>
+      <%= will_paginate @orders, renderer: BootstrapPagination::Rails %>
+    </div>
+  </div>
+</div>
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Viewed Orders Index Page");
+}
+<% end %>

@@ -1,0 +1,57 @@
+<h1>Hey <%= @order.user.name.titleize %>!</h1>
+<p>Just a quick update... the order you had placed has been delivered to you, as per our "sources". I hope it's making you look even more fabulous. Please share your feedback by rating the products.</p>
+<h3 style="text-transform:uppercase;">Your Order</h3>
+<table width="100%" style="width:100%;vertical-align:top;">
+  <tr>
+    <td width="15%">Project</td>
+    <td width="40%">Description</td>
+    <td width="15%">Size</td>
+    <td width="15%">Price</td>
+    <td width="15%">Feedback</td>
+  </tr>
+  <% @order.shopping_cart.shopping_cart_items.each do |item| %>
+  <tr>
+    <td width="15%">
+      <% if item.project.selfie? %>
+      <%= cl_image_tag(item.project.selfie.path, size: '240x240', :alt => item.project.title, :crop => :fill, :style => 'width:75px;height:75px;border:2px solid #eaeaea;') %>
+      <% else %>
+      <%= image_tag(item.project.project_photos.first.image.thumb.url, :alt => item.project.title, :style => 'width:75px;height:75px;border:2px solid #eaeaea;') if item.project.project_photos.first %>
+      <% end %>
+    </td>
+    <td width="50%">
+      <h4 style="text-transform:uppercase;font-weight:700;"><%= item.project.title%></h4>
+      <h5 style="font-family:'Palatino',san-serif;text-transform:uppercase;"><%= item.project.designer.name %></h5>
+    </td>
+    <td width="15%" style="text-transform:uppercase;"><%= item.details[:size] %></td>
+    <td width="15%">Rs. <%= item.price.to_i %></td>
+    <td width="15%"><a href="<%= designer_project_url(item.project.designer, item.project)%>?from=email" style="background:#000;color:#fff;font-weight:700;padding:5px;text-decoration:none;">Rate</a></td>
+  </tr>
+  <tr>
+    <td colspan="5" width="100%">
+      <hr style="border-color:#eaeaea;border-style:double;">
+    </td>
+  </tr>
+  <% end %>
+  <tr>
+    <td colspan="2"></td>
+    <td><strong>Subtotal</strong></td>
+    <td>Rs. <%= @order.shopping_cart.total.to_i %></td>
+  </tr>
+  <tr>
+    <td colspan="2"></td>
+    <td><strong>Discount</strong></td>
+    <td>Rs. <%= @order.discount.to_i %></td>
+  </tr>
+  <tr>
+    <td colspan="2"></td>
+    <td style="font-size:18px;"><strong>TOTAL</strong></td>
+    <td style="font-size:18px;">Rs. <%= @order.amount %></td>
+  </tr>
+</table>
+<p>There are few who admire and appreciate design, thanks for being one of them and supporting the Indie designer. Keep spreading your awesomeness. In the meantime, click <strong><a href="http://www.qreoh.com/">here</a></strong> to see what's new on site. Go on. We won't tell. ;)</p>
+<p>And remember, if you have any question we're just an email away. Hit reply or click <strong><a href="http://www.qreoh.com/contact-us">HERE</a></strong>!</p>
+<br>
+Thanks!<br>
+Troy from the QREOH Happiness Gang <br>
+<a href="https://twitter.com/qreoh" target="_blank">@qreoh</a> <br>
++91 7503455305

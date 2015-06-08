@@ -1,0 +1,6 @@
+<p>Hi <%= @message.recipient.name %>,</p>
+<p>You have a new message on QREOH from <%= @message.user.email %>. To reply please goto <a href="<%= messages_url %>"><%= messages_url %></a>.</p>
+<p><%= @message.user.name %> said;</p>
+<p>"<%= @message.message %>".</p>
+Thanks!<br>
+QREOH Happiness Gang<br>

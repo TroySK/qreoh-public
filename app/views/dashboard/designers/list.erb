@@ -1,0 +1,45 @@
+<table class="table">
+  <thead>
+    <tr>
+      <td>Label Name</td>
+      <td>eMail</td>
+      <td>Actions</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @designers.each do |designer| %>
+      <tr>
+        <td>
+          <% if designer.photo? %>
+          <%= cl_image_tag(designer.photo.path, size: '75x75', :crop => :fill) %>
+          <% else %>
+          <%= image_tag(designer.avatar.thumb.url, :width => '75') %>
+          <% end %>
+          <%= designer.name %>
+        </td>
+        <td><%= designer.user.email %></td>
+        <td>
+          <%= simple_form_for designer do |f| %>
+            <%= f.input :status, :as => :hidden, :input_html => {:value => 1} %>
+            <%= f.button :submit, :value => "Approve", :class => 'btn btn-sm btn-success' %>
+          <% end if designer.status == Designer::UNPUBLISHED %>
+          <%= simple_form_for designer, :url => notify_approval_dashboard_designer_url(designer) do |f| %>
+            <%= f.button :submit, :value => "Send Approval eMail", :class => 'btn btn-sm btn-info' %>
+          <% end if designer.status == Designer::UNPUBLISHED %>
+          <%= simple_form_for designer, :url => notify_rejection_dashboard_designer_url(designer) do |f| %>
+            <%= f.button :submit, :value => "Send Rejection eMail", :class => 'btn btn-sm btn-danger' %>
+          <% end if designer.status == Designer::UNPUBLISHED %>
+          <%= simple_form_for designer do |f| %>
+            <%= f.input :status, :as => :hidden, :input_html => {:value => 2} %>
+            <%= f.button :submit, :value => "Hide", :class => 'btn btn-sm btn-inverse' %>
+          <% end if designer.status == Designer::ACTIVE %>
+          <%= simple_form_for designer do |f| %>
+            <%= f.input :status, :as => :hidden, :input_html => {:value => 1} %>
+            <%= f.button :submit, :value => "Show", :class => 'btn btn-sm btn-warning' %>
+          <% end if designer.status == Designer::HIDDEN %>
+          <a href="<%= dashboard_designer_url(designer) %>" class='btn btn-sm btn-primary'>See Detail</a>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,49 @@
+<div class="block span3">
+  <div class="img-block">
+    <% if @project.selfie? %>
+    <a href="<%= designer_project_url(@project.designer, @project) %>"><%= cl_image_tag(@project.selfie.path, size: '240x240', :alt => @project.title, :crop => :fill) %></a>
+    <% else %>
+    <a href="<%= designer_project_url(@project.designer, @project) %>"><%= image_tag @project.project_photos.first.image.thumb.url, size: '240x240' if @project.project_photos.first %></a>
+    <% end %>
+    <div class="links favoriteActions">
+      <!--<a href="#" class="link-1">EDITOR'S PICK</a> 
+      <a href="#" class="link-2"></a> -->
+      <%- if current_user %>
+        <%- if current_user.favorites.collect(&:project_id).include?(@project.id) %>
+      <a href="/favorite/<%= @project.id %>" class="favorited">Favorited</a>
+        <% else %>
+      <a href="/favorite/<%= @project.id %>" class="favorite">Favorite</a>
+        <% end -%>
+      <% else %>
+      <a href="/favorite/<%= @project.id %>" class="favorite">Favorite</a>
+      <% end -%>
+    </div>
+    <a href="<%= designer_project_url(@project.designer, @project) %>">
+      <div class="box">
+        <p>Rs. <%= @project.price.to_i %></p>
+        <%- if @project.ooak %>
+        <div class="ooakfix">
+          <span><strong>Only <%= @project.current_stock %> Left!</strong></span>
+          <% else %>
+        <div class="clearfix">
+          <span class="span-left" style="width:<%= [0, [100, @project.completion_percentage].min].max %>%"></span>
+          <span class="span-right" style="width:<%= [0, (100 - @project.completion_percentage)].max %>%"></span>
+          <% end -%>
+        </div>
+      </div>
+    </a>
+    <a href="<%= designer_project_url(@project.designer, @project) %>">
+      <div class="detail">
+        <h5><%= @project.title %></h5>
+        <h6><%= @project.designer.name %></h6>
+        <%- if @project.status == Project::ACTIVE %>
+          <%- if @project.ooak == false and @project.remaining_days <= 0 %>
+        <span><%= @project.orders.count %> Pre-Orders | Project Ended</span>
+          <% end %>
+        <% else %>
+        <span>Private</span>
+        <% end %>
+      </div>
+    </a>
+  </div>
+</div>

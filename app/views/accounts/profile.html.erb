@@ -1,0 +1,29 @@
+<div class="container container-top">
+  <h1 class="text-lg">My Account</h1>
+  <p>You can change your password and delivery address in Settings, manage your Favorites and check your order status, communicate with designers from here. And if you need anything else, do <a href="/contact-us"><strong>Contact Us</strong></a>.</p>
+  <% unless current_user.referrals.blank? %>
+  <p>Remember to share your invite code; <%= signup_url(:referral_code => current_user.referrals.where(:referrer_type => Referral::JOINING_250_OFF).first.try(:referral_code)) %></p>
+  <% end %>
+  <div class="row margin-bottom-md">
+    <div class="col-md-3">
+      <% if !current_user.designer.blank? %>
+      <a href="<%= designer_url(current_user.designer) %>" class="btn btn-primary btn-block">My Designer Profile</a>
+      <% end %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-3">
+      <%= render "accounts/sidebar", favorites: true %>
+    </div>
+    <div class="col-md-9">
+      <% current_user.favorites.each do |favorite| %>
+        <%= render "designers/project", project: favorite.project %>
+      <% end %>
+    </div>
+  </div>
+</div>
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Viewed Profile Page");
+}
+<% end %>

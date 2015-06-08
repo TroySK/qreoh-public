@@ -1,0 +1,17 @@
+<div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 designer-thumbnail text-center">
+  <a href="<%= designer_url(designer) %>">
+    <% if designer.photo? %>
+    <%= cl_image_tag(designer.photo.path, size: '240x240', :alt => designer.name, :crop => :fill, :class => 'img-responsive') %>
+    <% else %>
+    <%= image_tag designer.avatar.thumb.url, size: '240x240', :alt => designer.name, :class => 'img-responsive' if designer.avatar %>
+    <% end %>
+    <h2><%= designer.name %></h2>
+  </a>
+  <a href="<%= follow_designer_url(designer) %>" class="btn btn-primary btn-sm" data-method="post">
+    <% if current_user && current_user.follows?(designer) %>
+    <i class="fa fa-user-times"></i> Unfollow
+    <% else %>
+    + Follow
+    <% end %>
+  </a>
+</div>

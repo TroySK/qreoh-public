@@ -1,0 +1,5 @@
+<div class="row-fluid nested-fields">
+  <div class="span3"><%= f.input :size, label: false, :input_html => { :placeholder => 'S, M, L, XL,...', :data => { :required => true } } %></div>
+  <div class="span3"><%= f.input :quantity, label: false, :as => :string, :input_html => { :placeholder => '0', :data => { :required => true, :type => "number" } } %></div>
+  <div class="span3"><%= link_to_remove_association "Delete", f %></div>
+</div>

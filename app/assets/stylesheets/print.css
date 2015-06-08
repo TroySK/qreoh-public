@@ -1,0 +1,8 @@
+body { font-family: 'Droid Sans'; }
+.text-caption { font-family: 'Open Sans Condensed'; text-transform: uppercase; font-size: 16px; }
+hr {border-top: 3px dotted #000; width: 96%; margin: 20px auto; }
+h3, h5 { text-transform: uppercase; }
+.address { width: 300px;}
+.text-alt { font-family: 'Arvo';} 
+.order-block h5, .order-block h6, .order-block h7 { margin: 0; }
+.order-block .heading { font-weight: bold; padding-bottom: 20px; }

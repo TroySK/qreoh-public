@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>QREOH - A Platform To Discover Independent Designers</title>
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" media="all">
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet" media="all">
+    <link href='//fonts.googleapis.com/css?family=Open+Sans:400,600,700' rel='stylesheet' type='text/css' media="all">
+    <link href='//fonts.googleapis.com/css?family=Arvo' rel='stylesheet' type='text/css' media="all">
+    <%= yield :stylesheet_links %>
+    <%= stylesheet_link_tag 'inbound', :media => "all" %>
+    <style>
+    .fa.fa-inverse:before { color: #fff; }
+    </style>
+  </head>
+  <body>
+  <div class="container alt-header" style="display:block;border-bottom:2px solid #eaeaea;">
+    <div class="row text-center">
+      <div class="col-xs-offset-5 col-xs-2 text-center">
+        <%= image_tag "qreoh.png", :class => 'logo', :style => 'padding:10px;' %>
+      </div>
+    </div>
+    <div class="row text-center">
+      <div class="col-xs-offset-4 col-xs-4 text-center">
+        <span class="fa-stack fa-md">
+          <i class="fa fa-circle fa-stack-2x"></i>
+          <i class="fa fa-wordpress fa-stack-1x fa-inverse"></i>
+        </span>
+        <span class="fa-stack fa-md">
+          <i class="fa fa-circle fa-stack-2x"></i>
+          <i class="fa fa-pinterest fa-stack-1x fa-inverse"></i>
+        </span>
+        <span class="fa-stack fa-md">
+          <i class="fa fa-circle fa-stack-2x"></i>
+          <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+        </span>
+        <span class="fa-stack fa-md">
+          <i class="fa fa-circle fa-stack-2x"></i>
+          <i class="fa fa-twitter fa-stack-1x fa-inverse" style="color:#fff"></i>
+        </span>
+        <span class="fa-stack fa-md">
+          <i class="fa fa-circle fa-stack-2x"></i>
+          <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+        </span>
+      </div>
+    </div>
+    <div class="row text-center margin-bottom-md">
+      <div class="col-md-offset-4 col-md-4">
+        <ul class="list-inline main-menu">
+          <li><a>Shop</a></li>
+          <li><a>Labs</a></li>
+          <li class="last"><a>Picks</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="margin-top:180px;">
+    <div class="row">
+      <div class="col-xs-offset-8 col-xs-4">
+        <p>QREOH Office <br>
+          New Delhi <br>
+          <%= Date.today.strftime('%A, %B %e, %Y') %>
+        </p>
+      </div>
+    </div>
+    <p>Hii <%= @order.shipping_address.name.split(' ').first rescue @order.user.email %>,</p>
+    <p>Thanks for ordering on QREOH and supporting our independent designers.</p>
+    <p>Your order number is <%= @order.id %> and confirmation code <%= @order.confirm_code %>. Please quote them to uniquely identify your order in case you have some concerns or just to share feedback.</p>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-8">
+        <h2 class="text-md">Order Details</h2>
+      </div>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col-xs-8">
+        <div class="row">
+          <div class="col-xs-2 text-uppercase"><strong>Project</strong></div>
+          <div class="col-xs-6 text-uppercase"><strong>Details</strong></div>
+          <div class="col-xs-2 text-uppercase"><strong>Size</strong></div>
+          <div class="col-xs-2 text-uppercase"><strong>Price</strong></div>
+        </div>
+        <% @order.shopping_cart.shopping_cart_items.each do |item| %>
+        <div class="row row-line-item" >
+          <div class="col-xs-2">
+            <% if item.project.selfie? %>
+            <%= cl_image_tag(item.project.selfie.path, size: '440x440', :crop => :pad, :class => 'img-responsive') %>
+            <% else %>
+            <%= image_tag item.project.project_photos.first.image.thumb.url, :class => 'img-responsive' %>
+            <% end %>
+          </div>
+          <div class="col-xs-6">
+            <h1><%= item.project.title %></h1>
+            <h2><%= item.project.designer.name %></h2>
+          </div>
+          <div class="col-xs-2 col-xs-2 col-xs-2">
+            <p class="text-uppercase"><%= item.details[:size] %></p>
+          </div>
+          <div class="col-xs-2 col-xs-2 col-xs-2">
+            <p><%= local_price_with_symbol(item.price) %></p>
+          </div>
+        </div>
+        <% end %>
+        <div class="row margin-top-md">
+          <div class="col-xs-offset-6 col-xs-6">
+            <table class="table text-uppercase table-total">
+              <tr>
+                <td>Sub-total</td>
+                <td><%= local_price_with_symbol(@order.shopping_cart.total) %></td>
+              </tr>
+              <tr>
+                <td>Discount</td>
+                <td><%= local_price_with_symbol(@order.shopping_cart.order.discount) %></td>
+              </tr>
+              <tr class="bg-info">
+                <td>Total</td>
+                <td><%= local_price_with_symbol(@order.shopping_cart.order.amount) %></td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <h3 style="margin-top:0">Payment Method</h3>
+        <p><%= @order.payment_mode %></p>
+        <h3>Address</h3>
+        <p class="address">
+          <%= @order.try(:shipping_address).try(:name) %><br>
+          <%= [@order.try(:shipping_address).try(:address1), @order.try(:shipping_address).try(:address2), @order.try(:shipping_address).try(:city), @order.try(:shipping_address).try(:state), @order.try(:shipping_address).try(:country), @order.try(:shipping_address).try(:zipcode)].join(', ') %><br>
+          Contact No.: <%= @order.try(:shipping_address).try(:phone_number) %>
+        </p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <p>We hope QREOH has been able to deliver to your expectations and we can definitely do better. Share your thoughts with us, we're always an email away if you need help. Looking forward to seeing you again on <strong>www.QREOH.com</strong>!</p>
+        <p>Best,</p>
+        <p>
+          QREOH Happiness Gang<br>
+          <strong>eMail:</strong> hello@qreoh.com<br>
+          <strong>Phone:</strong> +91 7503455305<br>
+          <strong>Twitter:</strong> @qreoh<br>
+          <strong>Facebook:</strong> https://www.facebook.com/qreoh<br>
+        </p>
+      </div>
+    </div>
+  </div>
+  </body>
+</html>

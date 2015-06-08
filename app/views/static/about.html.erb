@@ -1,0 +1,60 @@
+<div class="container container-top">
+  <h1 class="text-lg">About Us</h1>
+  <p>QREOH is a platform to discover independent designers. Designers showcase prototypes of their products, and visitors can then place pre-orders for the products they like. This way, designers get the funds necessary to start production. Designers also have the option to directly sell their limited edition projects.</p>
+  <p>QREOH has two primary objectives.</p>
+  <ol>
+    <li>Help designers set up their own brands and sell their products, with minimum investment and risk.</li>
+    <li>Offer discerning patrons a range of carefully crafted products with contemporary design at their core.</li>
+  </ol>
+  <h1 class="bg-primary padding-10">Meet the Team</h1>
+  <p>QREOH was started in April, 2013 by Cecile 'Cece' Baltazart and Shirsendu 'Troy' Karmakar, and is located in New Delhi. It took about 400 hours of work spread over 5 months, 800 emails and 3 fashion designers to launch the beta version. We plan to improve our experience during this beta phase. We dream to build a community where designers; the artists; can come and cater to the needs of design conscious buyers; the patrons.</p>
+  <div class="row">
+    <div class="col-md-6 col-sm-12">
+      <%= image_tag "icon_troy.png", :class => "full-width" %>
+      <h2>Shirsendu 'Troy' Karmakar</h2>
+      <p>Troy juggles engineering and customer support at QREOH</p>
+      <div class="center-block text-center">
+        <span class="fa-stack fa-md">
+          <a href="http://www.facebook.com/shirsendu.karmakar" target="_blank">
+            <i class="fa fa-square fa-stack-2x"></i>
+            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+          </a>
+        </span>
+        <span class="fa-stack fa-md">
+          <a href="https://www.twitter.com/troysk704" target="_blank">
+            <i class="fa fa-square fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+          </a>
+        </span>
+        <span class="fa-stack fa-md">
+          <a href="http://www.troysk.com" target="_blank">
+            <i class="fa fa-square fa-stack-2x"></i>
+            <i class="fa fa-home fa-stack-1x fa-inverse"></i>
+          </a>
+        </span>
+        <span class="fa-stack fa-md">
+          <a href="http://www.linkedin.com/in/shirsendukarmakar" target="_blank">
+            <i class="fa fa-square fa-stack-2x"></i>
+            <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+          </a>
+        </span>
+        <span class="fa-stack fa-md">
+          <a href="https://medium.com/@troysk704" target="_blank">
+            <i class="fa fa-square fa-stack-2x"></i>
+            <i class="fa fa-wordpress fa-stack-1x fa-inverse"></i>
+          </a>
+        </span>
+      </div>
+    </div>
+    <div class="col-md-6 col-sm-12">
+      <%= image_tag "icon_cece.png", :class => "full-width" %>
+      <h2>Cecile 'Cece' Baltazart</h2>
+      <p>Cece takes care of Design and User Experience for QREOH. She hunts designers for QREOH and help them get jumpstarted.</p>
+    </div>
+  </div>
+</div>
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Viewed About Page");
+}
+<% end %>

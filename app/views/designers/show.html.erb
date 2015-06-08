@@ -1,0 +1,344 @@
+<% content_for :title do %>
+  <title>Shop from Indian Fashion Designer <%= "#{@designer.name}" %> | QREOH</title>
+<% end %>
+<% content_for :opengraph do %>
+  <meta property="og:title" content="<%= @designer.name %> on QREOH" />
+  <meta property="og:image" content="<%= cloudinary_url(@designer.photo.path) if @designer.photo? %>" />
+  <meta property="og:description" content="<%= @designer.about.to_s.squish %>" />
+  <meta property="og:url" content="<%= designer_url(@designer) %>" />
+  <meta property="og:site_name" content="QREOH" />
+  <meta property="og:type" content="profile" />
+  <meta name="description" content="Online fashion designer's shop for <%= @designer.name %>. <%= @designer.about.to_s.squish %>">
+<% end %>
+<div class="parallax-designer-profile slide-default">
+  <div class="parallax-background" data-intro="Your cover photo." data-step="1">
+    <div class="header-lg" style='<%= "background: url(#{cloudinary_url(@designer.cover_photo.path, :width => 1200, :crop => :fit) }) no-repeat; background-size: cover;" if @designer.cover_photo %>'></div>
+  </div>
+  <div class="parallax-text container">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-offset-3 col-md-9 text-center-sm" data-intro="Your Label and Location" data-step="2">
+          <h1 class="margin-top-md"><%= @designer.name %></h1>
+          <h2><%= @designer.location %></h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-md-3 row-top-75">
+      <div class="row">
+        <div class="col-lg-12 col-md-12" data-intro="Your Label's Profile Photo" data-step="3">
+          <%= cl_image_tag(@designer.photo.path, width: '300', :crop => 'fill', :class => 'img-responsive thumbnail col-lg-12 col-md-12 col-sm-8 col-offset-sm-2 col-xs-8 col-xs-offset-2 col-md-offset-0') if @designer.photo %>
+        </div>
+      </div>
+      <% if current_user && @designer.is_owner?(current_user) %>
+<!--       <div class="row margin-bottom-md" data-intro="Upload your lookbook from here. The lookbook can be used by the QREOH team to do a bulk upload of products. You may also send your photos through this button." data-step="4">
+        <div class="col-md-10">
+          <a href="<%= new_designer_project_url(@designer) %>" class="btn btn-lg btn-primary btn-block">Share Lookbook</a>
+        </div>
+      </div> -->
+      <div class="row margin-bottom-md" data-intro="Upload a new product from here." data-step="5">
+        <div class="col-md-10">
+          <a href="<%= new_designer_project_url(@designer) %>" class="btn btn-lg btn-primary btn-block">Upload Product</a>
+        </div>
+      </div>
+      <div class="row margin-bottom-md" data-intro="Edit your profile by clicking on this button. The contents of this page." data-step="6">
+        <div class="col-md-10">
+          <a href="<%= edit_designer_url(@designer) %>" class="btn btn-primary btn-block">Edit Profile</a>
+        </div>
+      </div>
+      <div class="row margin-bottom-md" data-intro="Manage your products and discounts." data-step="7">
+        <div class="col-md-10">
+          <a href="<%= manage_designer_url(@designer) %>" class="btn btn-primary btn-block">Manage Sales</a>
+        </div>
+      </div>
+      <% else %>
+      <div class="row margin-bottom-md">
+        <div class="col-md-10">
+          <a href="#" class="btn btn-lg btn-primary btn-block" data-toggle="modal" data-target="#contactDesigner">Contact</a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-8">
+          <a href="#" class="btn btn-sm btn-primary btn-block" data-toggle="modal" data-target="#giveFeedback">Write feedback</a>
+        </div>
+      </div>
+      <% end %>
+      <div class="row">
+        <div class="col-md-12">
+          <h2 class="text-uppercase">Find me at:</h2>
+        </div>
+        <% unless @designer.website.blank? %>
+        <div class="col-md-12">
+          <p><strong><a href="<%= @designer.website %>" target="_blank">Website</a></strong><p>
+        </div>
+        <% end %>
+        <div class="col-md-12">
+          <% unless @designer.facebook.blank? %>
+          <span class="fa-stack fa-md">
+            <a href="<%= @designer.facebook %>" target="_blank">
+              <i class="fa fa-square fa-stack-2x"></i>
+              <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+            </a>
+          </span>
+          <% end %>
+          <% unless @designer.twitter.blank? %>
+          <span class="fa-stack fa-md">
+            <a href="<%= @designer.twitter %>" target="_blank">
+              <i class="fa fa-square fa-stack-2x"></i>
+              <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+            </a>
+          </span>
+          <% end %>
+          <% unless @designer.pinterest.blank? %>
+          <span class="fa-stack fa-md">
+            <a href="<%= @designer.pinterest %>" target="_blank">
+              <i class="fa fa-square fa-stack-2x"></i>
+              <i class="fa fa-pinterest fa-stack-1x fa-inverse"></i>
+            </a>
+          </span>
+          <% end %>
+          <% unless @designer.linkedin.blank? %>
+          <span class="fa-stack fa-md">
+            <a href="<%= @designer.linkedin %>" target="_blank">
+              <i class="fa fa-square fa-stack-2x"></i>
+              <i class="fa fa-linkedin fa-stack-1x fa-inverse"></i>
+            </a>
+          </span>
+          <% end %>
+          <% unless @designer.instagram.blank? %>
+          <span class="fa-stack fa-md">
+            <a href="<%= @designer.instagram %>" target="_blank">
+              <i class="fa fa-square fa-stack-2x"></i>
+              <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+            </a>
+          </span>
+          <% end %>
+          <% unless @designer.behance.blank? %>
+          <span class="fa-stack fa-md">
+            <a href="<%= @designer.behance %>" target="_blank">
+              <i class="fa fa-square fa-stack-2x"></i>
+              <i class="fa fa-behance fa-stack-1x fa-inverse"></i>
+            </a>
+          </span>
+          <% end %>
+          <% unless @designer.slideshare.blank? %>
+          <span class="fa-stack fa-md">
+            <a href="<%= @designer.slideshare %>" target="_blank">
+              <i class="fa fa-square fa-stack-2x"></i>
+              <i class="fa fa-slideshare fa-stack-1x fa-inverse"></i>
+            </a>
+          </span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-9">
+      <div class="row">
+        <div class="col-md-12">
+          <br>
+          <% if current_user && @designer.is_owner?(current_user) && !current_user.is_admin? %>
+          <a href="#" class="btn btn-primary" id="tutorialBtn">Take a tour</a>
+          <% else %>
+          <a href="<%= follow_designer_url(@designer) %>" class="btn btn-primary" data-method="post">
+            <% if current_user && current_user.follows?(@designer) %>
+            <i class="fa fa-user-times"></i> Unfollow
+            <% else %>
+            + Follow
+            <% end %>
+          </a>
+          <% end %>
+          <br><br>
+          <p><%= sanitize(@designer.about, tags: %w(a b strong br i em u)) %></p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <ul class="nav nav-tabs margin-bottom-md" role="tablist">
+            <li class="active"><a href="#current-collection" role="tab" data-toggle="tab" data-intro="Your products currently available to shop on QREOH." data-step="8">Current Collection</a></li>
+            <li><a href="#upcoming-collection" role="tab" data-toggle="tab" data-intro="Your uploaded products. Not on sale yet." data-step="9">Upcoming Collection</a></li>
+            <li><a href="#previous-collection" role="tab" data-toggle="tab" data-intro="Your products which are no more on sale on QREOH." data-step="10">Previous Collection</a></li>
+            <li><a href="#feedback" role="tab" data-toggle="tab" data-intro="Feedback given to you by your patrons." data-step="11">Feedback</a></li>
+          </ul>
+          <div class="tab-content">
+            <div class="tab-pane active" id="current-collection">
+              <div class="row">
+                <% if @designer.projects.active.count > 0 %>
+                  <% @designer.projects.active.each do |project| %>
+                    <%= render "project", project: project %>
+                  <% end %>
+                <% else %>
+                  <div class="col-md-12">
+                    <p class="lead"><em>No items yet.</em></p>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <div class="tab-pane" id="upcoming-collection">
+              <div class="row">
+                <% if @designer.projects.unpublished.count > 0 %>
+                  <% @designer.projects.unpublished.each do |project| %>
+                    <%= render "project", project: project %>
+                  <% end %>
+                <% else %>
+                  <div class="col-md-12">
+                    <p class="lead"><em>No items yet.</em></p>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <div class="tab-pane" id="previous-collection">
+              <div class="row">
+                <% if @designer.projects.archived.count > 0 %>
+                  <% @designer.projects.archived.each do |project| %>
+                    <%= render "project", project: project %>
+                  <% end %>
+                <% else %>
+                  <div class="col-md-12">
+                    <p class="lead"><em>No items yet.</em></p>
+                  </div>
+                <% end %>
+              </div>
+            </div>
+            <div class="tab-pane" id="feedback">
+              <div class="row">
+                <% if @designer.designer_feedbacks.count > 0 %>
+                  <% @designer.designer_feedbacks.each do |feedback| %>
+                    <div class="col-md-12">
+                      <blockquote>
+                        <p><%= feedback.feedback_text %></p>
+                        <footer><cite title="<%= feedback.user.name %>"><%= feedback.user.name %></cite> on <%= feedback.created_at.strftime('%A, %B %e, %Y')%></footer>
+                      </blockquote>
+                    </div>
+                  <% end %>
+                  <% else %>
+                    <div class="col-md-12">
+                      <p class="lead"><em>No feedback yet.</em></p>
+                    </div>
+                  <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid margin-bottom-lg margin-top-md">
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1">
+      <h5 class="text-uppercase"><strong>QREOH Picks</strong></h5>
+      <div class="carousel-responsive">
+      <% @designer.recommended_projects.each do |project| %>
+        <%= render "projects/project", project: project %>
+      <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="contactDesignerModalLabel" id="contactDesigner" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title" id="contactDesignerModalLabel">Contact <%= @designer.name %></h4>
+      </div>
+      <div class="modal-body text-center">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <textarea rows="8" class="form-control"></textarea>
+            <br>
+            <a href="#" id="sendNewQuestion" class="btn btn-lg btn-primary">Send</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="giveFeedbackModalLabel" id="giveFeedback" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">
+          <span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+        </button>
+        <h4 class="modal-title" id="giveFeedbackModalLabel">Feedback</h4>
+      </div>
+      <div class="modal-body text-center">
+        <div class="row">
+          <div class="col-md-12 text-center">
+            <div class="well well-sm"><p>Please give a genuine feedback</p></div>
+            <textarea rows="8" class="form-control"></textarea>
+            <br>
+            <a href="#" id="sendNewFeedback" class="btn btn-lg btn-primary">Send</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<% content_for :javascript_include do %>
+  <%= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/gsap/1.14.1/TweenMax.min.js", "jquery.scrollmagic.min.js", "//cdn.jsdelivr.net/intro.js/1.0.0/intro.min.js" %>
+<% end %>
+<% content_for :javascript do %>
+<% if current_user && @designer.is_owner?(current_user) && @designer.projects.size < 1 %>
+introJs().start();
+<% end %>
+$("#tutorialBtn").on("click", function(e){
+  e.preventDefault();
+  introJs().start();
+});
+var controller = new ScrollMagic();
+new ScrollScene({
+  triggerElement: ".parallax-designer-profile",
+  duration: $(window).height() + 300,
+  offset: 100
+})
+.addTo(controller)
+.triggerHook("onLeave")
+.setTween(new TimelineMax().add([
+  TweenMax.fromTo(".alt-header", 1, {background: "rgba(255, 255, 255, -2)", boxShadow: "0 0 3px rgba(0,0,0,-2)"}, {background: "rgba(255, 255, 255, 0.98)", boxShadow: "0 0 3px rgba(0,0,0,0.1)", ease: Linear.ease})
+]));
+
+$("#sendNewQuestion").on("click", function(e){
+  e.preventDefault();
+  $.ajax({
+    url: "/contact_designer",
+    data: {"designer_id": <%= @designer.id %>, "question": $("#contactDesigner textarea").val()},
+    type: "POST"
+  }).done(function(){
+    $('#contactDesigner').modal('hide');
+    $.bootstrapGrowl("Question sent to designer successfully.", {
+      type: "info",
+      align: 'right',
+      offset: {from: 'top', amount: 50},
+      allow_dismiss: true
+    });
+  });
+});
+$("#sendNewFeedback").on("click", function(e){
+  e.preventDefault();
+  $.ajax({
+    url: "/give_feedback",
+    data: {"designer_id": <%= @designer.id %>, "feedback_text": $("#giveFeedback textarea").val()},
+    type: "POST"
+  }).done(function(){
+    $('#giveFeedback').modal('hide');
+    $.bootstrapGrowl("Feedback added successfully. Thanks for taking the time!", {
+      type: "info",
+      align: 'right',
+      offset: {from: 'top', amount: 50},
+      allow_dismiss: true
+    });
+  });
+});
+<% end %>
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Viewed Designers Page", {"Designer":"<%= @designer.name %>"});
+}
+<% end %>

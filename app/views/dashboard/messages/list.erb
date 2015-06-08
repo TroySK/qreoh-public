@@ -1,0 +1,21 @@
+<table class="table">
+  <thead>
+    <tr>
+      <td>Date</td>
+      <td>From</td>
+      <td>To</td>
+      <td>Message</td>
+    </tr>
+  </thead>
+  <tbody>
+    <% @messages.each do |message| %>
+      <tr>
+        <td><%= message.user.created_at.strftime("%d-%m-%y") %><br></td>
+        <td><%= message.user.email %><br></td>
+        <td><%= message.recipient.email %></td>
+        <td><%= message.message %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @messages %>

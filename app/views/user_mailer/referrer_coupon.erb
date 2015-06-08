@@ -1,0 +1,11 @@
+<h3>Hii <%= @user.name.capitalize %>!</h3>
+<p><%= @referred_user.name.capitalize %> just signed up using an invite code you had shared.</p>
+<p>As promised; here is your Rs. 250 off coupon <strong><%= @coupon.code %></strong>.</p>
+<br>
+<p>I hope you remember, the more you share the more you get. There are NO LIMITS! :D</p>
+<p><strong>Invite more friends by sharing the following URL;</strong></p>
+<p style="background:#000;color:#fff;font-weight:700;padding:5px;display:inline-block;"><%= signup_url(:referral_code => @referral_code) %></p>
+
+<p>Best,</p>
+<p>Troy and the QREOH Happiness Gang</p>
+<p><a href="https://twitter.com/troysk704" target="_blank" style="font-weight:700;">@troysk704</a> | <a href="https://twitter.com/qreoh" target="_blank" style="font-weight:700;">@qreoh</a></p>

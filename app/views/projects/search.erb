@@ -1,0 +1,48 @@
+<% content_for :title do %>
+  <title>Search results for <%= sanitize(params[:q]) %> | QREOH</title>
+<% end %>
+<div class="container container-top">
+  <div class="row">
+    <div class="col-md-offset-4 col-md-4 text-center">
+      <form action="/search" method="GET">
+        <div class="input-group">
+          <input type="text" class="form-control input-search" name="q" value="<%= params[:q] %>">
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="button"><i class="fa fa-search"></i></button>
+          </span>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12 margin-top-md">
+      <div class="row container-project">
+        <% @projects.each do |project| %>
+          <%= render "projects/project", project: project %>
+        <% end %>
+      </div>
+      <div class="row text-right">
+        <%= will_paginate @projects, renderer: BootstrapPagination::Rails %>
+      </div>
+    </div>
+  </div>
+</div>
+<% content_for :javascript_include do %>
+<script src="//cdn.jsdelivr.net/jquery.infinitescroll/2.0b2/jquery.infinitescroll.min.js"></script>
+<% end %>
+<% content_for :javascript do %>
+$('.container-project').infinitescroll({
+  loading     : {
+    msgText      : '<em>Loading more designs &hellip;</em>',
+    finishedMsg  : "This is the end, beautiful friend. This is the end, my only friend, the end &hellip;"
+  },
+  navSelector  : "ul.pagination",
+  nextSelector : "li.next a",
+  itemSelector : ".project-thumbnail"
+});
+<% end %>
+<% content_for :javascript_tracking do %>
+if(typeof mixpanel !== 'undefined'){
+  mixpanel.track("Viewed Search Page");
+}
+<% end %>
